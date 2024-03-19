@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::middleware([
-    'auth:sanctum',
+    // 'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
