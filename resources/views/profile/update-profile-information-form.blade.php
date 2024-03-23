@@ -52,6 +52,12 @@
             </div>
         @endif
 
+        <!-- Dni -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="dni" value="{{ __('DNI') }}" />
+            <x-jet-input id="dni" type="text" class="mt-1 block w-full" wire:model.defer="state.dni" autocomplete="dni" />
+            <x-jet-input-error for="dni" class="mt-2" />
+        </div>
         <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="name" value="{{ __('Name') }}" />
@@ -80,6 +86,12 @@
                     </p>
                 @endif
             @endif
+        </div>
+        <!-- Phone -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="phone" value="{{ __('Phone') }}" />
+            <x-jet-input id="phone" type="text" class="mt-1 block w-full" wire:model.defer="state.phone" autocomplete="phone" />
+            <x-jet-input-error for="phone" class="mt-2" />
         </div>
     </x-slot>
 

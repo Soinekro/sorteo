@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.form-input-next {
+    @apply text-center border-4 border-next-500 flex items-center w-full px-5 py-3 mr-2 text-sm font-medium
+                    outline-none placeholder:text-gray-700 text-gray-900 rounded-full
+                     focus:border-next-500 focus:ring-0
+}
+
+.form-input-next:focus {
+    box-shadow: 0 0 5px #0fb9b9 !important;
+}
