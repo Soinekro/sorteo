@@ -3,9 +3,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="flex items-center justify-center w-full">
-                    <div class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3">
-                        <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo"
-                            class="h-full sm:w-56 md:max-w-72 w-48 sm:h-56 md:max-h-72">
+                    <div class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
+                        <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="sm:w-60 w-48">
                         <h2 class="text-3xl font-bold text-gray-800">
                             {{ $premios }} Premios
                         </h2>
@@ -108,7 +107,7 @@
 
                         <a href="{{ route('register.form') }}"
                             class="w-full px-2 py-5 text-3xl font-bold leading-none text-white transition uppercase text-center
-                                duration-300 md:w-96 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
+                                duration-300 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
                             {{ __('Participar') }}
                         </a>
                     </div>

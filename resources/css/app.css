@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .form-input-next {
-    @apply text-center border-4 border-next-500 flex items-center w-full px-5 py-3 mr-2 text-sm font-medium
+    @apply text-center border-4 border-next-500 flex items-center w-full max-w-[340px] px-5 py-3 m-auto text-sm font-medium
                     outline-none placeholder:text-gray-700 text-gray-900 rounded-full
                      focus:border-next-500 focus:ring-0
 }

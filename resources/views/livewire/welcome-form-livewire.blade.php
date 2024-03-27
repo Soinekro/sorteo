@@ -2,9 +2,9 @@
     <h1 class="text-2xl font-bold text-center text-grey-900 dark:text-grey-100">
         Datos
     </h1>
-    <div class="flex items-center justify-center w-full">
+    <div class="flex items-center justify-center">
         <!-- formulario -->
-        <form class="flex flex-col w-full h-full pb-6 text-center bg-white rounded-3xl gap-4" wire:submit.prevent="save"
+        <form class="flex flex-col h-full pb-6 text-center bg-white rounded-3xl gap-4" wire:submit.prevent="save"
             wire:loading.class="opacity-50">
             <div class="flex flex-col justify-between">
                 <input id="dni" type="numeric" placeholder="87654321" class="form-input-next" wire:model="dni"
@@ -44,7 +44,7 @@
 
                     <p class="ml-2 text-sm leading-relaxed text-gray-900">Aceptas nuestros <button type="button"
                             wire:click="displayPolicies"
-                            class="font-bold text-gray-700 underline">{{ __('Terminos y condiciones') }}</button>?
+                            class="font-bold text-gray-700 underline">{{ __('Términos y condiciones') }}</button>?
                     </p>
                 </label>
                 <x-jet-input-error for="aceptar" class="mt-2 text-red-500" />

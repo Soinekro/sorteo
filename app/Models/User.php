@@ -26,6 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'dni',
         'password',
     ];
@@ -59,4 +60,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function registerUsers()
+    {
+        return $this->hasMany(RegisterUser::class);
+    }
 }

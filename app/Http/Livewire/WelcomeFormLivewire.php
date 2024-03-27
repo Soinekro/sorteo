@@ -2,15 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Event;
-use App\Models\Premio;
 use App\Models\User;
 use App\Traits\AlertTrait;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
-use GuzzleHttp\Psr7\Request as Psr7Request;
+// use GuzzleHttp\Psr7\Request as Psr7Request;
 
 class WelcomeFormLivewire extends Component
 {
@@ -21,16 +19,11 @@ class WelcomeFormLivewire extends Component
     public $user;
     public $dni;
     public $name;
-    public $evento_id;
     public $email;
     public $phone;
     public $cantidad = 0;
     public $aceptar = false;
 
-    public function mount()
-    {
-        $this->getEventos();
-    }
     public function render()
     {
         return view('livewire.welcome-form-livewire');
@@ -67,43 +60,52 @@ class WelcomeFormLivewire extends Component
                 'aceptar' => 'accepted',
             ],
             [
-                'dni.required' => 'El campo DNI es obligatorio',
-                'dni.numeric' => 'El campo DNI debe ser numérico',
-                'dni.digits' => 'El campo DNI debe tener 8 dígitos',
-                'name.required' => 'El campo Nombre es obligatorio',
-                'email.required' => 'El campo Email es obligatorio',
-                'email.email' => 'El campo Email debe ser un email válido',
-                'email.unique' => 'El campo Email ya está en uso',
-                'phone.required' => 'El campo celular es obligatorio',
-                'phone.numeric' => 'El campo celular debe ser numérico',
-                'phone.digits' => 'El campo celular debe tener 9 dígitos',
-                'phone.unique' => 'El campo celular ya está en uso',
-                'cantidad.required' => 'El campo Cantidad es obligatorio',
-                'cantidad.numeric' => 'El campo Cantidad debe ser numérico',
-                'cantidad.min' => 'El campo Cantidad debe ser mayor a 0',
-                'aceptar.accepted' => 'Debes aceptar los términos y condiciones',
+                'dni.required' => 'El campo DNI es obligatorio.',
+                'dni.numeric' => 'El campo DNI debe ser numérico.',
+                'dni.digits' => 'El campo DNI debe tener 8 dígitos.',
+                'name.required' => 'El campo Nombre es obligatorio.',
+                'email.required' => 'El campo Email es obligatorio.',
+                'email.email' => 'El campo Email debe ser un email válido.',
+                'email.unique' => 'El campo Email ya está en uso.',
+                'phone.required' => 'El campo celular es obligatorio.',
+                'phone.numeric' => 'El campo celular debe ser numérico.',
+                'phone.digits' => 'El campo celular debe tener 9 dígitos.',
+                'phone.unique' => 'El campo celular ya está en uso.',
+                'cantidad.required' => 'El campo Cantidad es obligatorio.',
+                'cantidad.numeric' => 'El campo Cantidad debe ser numérico.',
+                'cantidad.min' => 'El campo Cantidad debe ser mayor a 0.',
+                'aceptar.accepted' => 'Debes aceptar los términos y condiciones.',
             ]
         );
         DB::beginTransaction();
         try {
-            User::create([
-                'dni' => $this->dni,
-                'name' => $this->name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'password' => Hash::make($this->dni),
-            ]);
-            //link de contacto por whatsapp
-
-            $link = 'https://api.whatsapp.com/send?phone=51945481724&text=Hola%20quiero%20participar%20en%20el%20sorteo%20mi%20DNI%20' . $this->dni . '%20y%20mi%20nombre%20es%20' . $this->name . '%20con%20' . $this->cantidad . '%20entradas';
-            return redirect()->away($link);
-            DB::commit();
+            $user = User::where('dni', $this->dni)
+                ->first();
+            if (!$user) {
+                $user = User::create([
+                    'dni' => $this->dni,
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'password' => Hash::make($this->dni),
+                ]);
+            }
+            if ($user->registerUsers()->where('attended', false)->count() == 0) {
+                $registro = $user->registerUsers()->create([
+                    'tickets' => $this->cantidad,
+                    'accepted_terms' => $this->aceptar,
+                    'attended' => false,
+                ]);
+                DB::commit();
+                return redirect()->route('gracias');
+            } else {
+                $this->addError('cantidad', 'Ya estas registrado, en brebe nos comunicaremos contigo.');
+                DB::rollBack();
+                return;
+            }
         } catch (\Exception $e) {
             DB::rollBack();
-            return;
         }
-        $this->resetInputs();
-        $this->emit('showAlert', 'success', 'Datos guardados correctamente');
     }
 
     public function updatedDni()
@@ -145,10 +147,5 @@ class WelcomeFormLivewire extends Component
                 }
             }
         }
-    }
-
-    public function getEventos()
-    {
-        $this->eventos = Premio::all('name', 'id');
     }
 }

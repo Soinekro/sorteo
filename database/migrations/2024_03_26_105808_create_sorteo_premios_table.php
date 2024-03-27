@@ -16,9 +16,9 @@ class CreateSorteoPremiosTable extends Migration
         Schema::create('sorteo_premios', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('premio_id');
-            $table->foreign('premio_id')->references('id')->on('events');
+            $table->foreign('premio_id')->references('id')->on('events')->onDelete('cascade');
             $table->unsignedBigInteger('winner_id');
-            $table->foreign('winner_id')->references('id')->on('users');
+            $table->foreign('winner_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
