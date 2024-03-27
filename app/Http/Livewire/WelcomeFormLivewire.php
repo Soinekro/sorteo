@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use GuzzleHttp\Psr7\Request as Psr7Request;
 
 class WelcomeFormLivewire extends Component
 {
@@ -85,14 +86,17 @@ class WelcomeFormLivewire extends Component
         );
         DB::beginTransaction();
         try {
-            $user = User::create([
+            User::create([
                 'dni' => $this->dni,
                 'name' => $this->name,
                 'email' => $this->email,
                 'phone' => $this->phone,
                 'password' => Hash::make($this->dni),
             ]);
-            dd($user);
+            //link de contacto por whatsapp
+
+            $link = 'https://api.whatsapp.com/send?phone=51945481724&text=Hola%20quiero%20participar%20en%20el%20sorteo%20mi%20DNI%20' . $this->dni . '%20y%20mi%20nombre%20es%20' . $this->name . '%20con%20' . $this->cantidad . '%20entradas';
+            return redirect()->away($link);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();

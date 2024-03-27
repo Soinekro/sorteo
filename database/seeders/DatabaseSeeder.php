@@ -38,7 +38,6 @@ class DatabaseSeeder extends Seeder
                 'name' => $premio,
                 'slug' => Str::slug($premio),
                 'description' => 'Descripción del premio ' . $premio,
-                'image' => 'https://via.placeholder.com/150',
             ]);
         }
     }

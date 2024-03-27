@@ -16,12 +16,8 @@ class Premio extends Model
         'slug',
         'description',
         'image',
-        'user_id',
+        'active',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
 
 }
