@@ -19,5 +19,8 @@ class Premio extends Model
         'active',
     ];
 
-
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
 }

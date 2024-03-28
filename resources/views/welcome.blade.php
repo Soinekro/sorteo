@@ -1,107 +1,63 @@
 <x-app-layout>
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+            {{-- <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg"> --}}
                 <div class="flex items-center justify-center w-full">
-                    <div class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
+                    <div
+                        class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
                         <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="sm:w-60 w-48">
                         <h2 class="text-3xl font-bold text-gray-800">
                             {{ $premios }} Premios
                         </h2>
-                        <div id="default-carousel" x-data="{
-                            currentIndex: 0,
-                            images: {{ json_encode($images) }},
-                            startTimer() {
-                                this.timer = setInterval(() => {
-                                    this.next();
-                                }, 3000); // Cambia cada 3 segundos
-                            },
-                            stopTimer() {
-                                clearInterval(this.timer);
-                                this.startTimer(); // Reinicia el temporizador
-                            },
-                            next() {
-                                this.currentIndex = (this.currentIndex + 1) % this.images.length;
-                            },
-                            prev() {
-                                this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
-                            }
-                        }" x-init="startTimer()" class="w-full">
-                            <!-- Carousel wrapper -->
-                            <div class="overflow-hidden relative h-56 rounded-lg sm:h-64 xl:h-72 2xl:h-72">
-                                <!-- Carousel items -->
-                                <template x-for="(image, index) in images" :key="index">
-                                    <div x-show="currentIndex === index" class="duration-700 ease-in-out">
-                                        <span
-                                            class="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800">First
-                                            Slide</span>
-                                        <img :src="image" :alt="'Slide ' + (index + 1)"
-                                            class="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2 rounded-2xl">
+                        <div class="w-full md:w-80 p-4 flex items-center justify-center">
+                            <section class="flex flex-col items-center justify-center w-full"
+                                @keydown.arrow-right="state.usedKeyboard = true;updateCurrent(nextSlide)"
+                                @keydown.arrow-left="state.usedKeyboard = true;updateCurrent(previousSlide)"
+                                @keydown.window.tab="state.usedKeyboard = true" x-data="testimonialSlideshow(slides)"
+                                x-title="Quotes Slideshow" x-init="setup()">
+                                <div tabindex="1" class="relative w-full rounded-2xl overflow-hidden mb-6 bg-gray-300"
+                                    :class="{ 'focus:outline-none': !state.usedKeyboard }">
+                                    <template x-for="(slide, index) in slides" :key="slide.id">
+                                        <div :aria-hidden="(state.order[state.currentSlide] != slide.id).toString()">
+                                            <div x-show="state.order[state.currentSlide] == slide.id"
+                                                :x-ref="slide.id" :x-transition:enter="transitions('enter')"
+                                                :x-transition:enter-start="transitions('enter-start')"
+                                                :x-transition:enter-end="transitions('enter-end')"
+                                                :x-transition:leave="transitions('leave')"
+                                                :x-transition:leave-start="transitions('leave-start')"
+                                                :x-transition:leave-end="transitions('leave-end')">
+                                                <img :src="slide.image" :alt="'Slide ' + (index + 1)"
+                                                    class="w-full rounded-2xl"
+                                                    :class="{ 'animate-pulse': !state.moving }"
+                                                    :style="`animation-duration:${attributes.timer}ms;`">
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div x-cloak class="w-full h-full absolute top-0 ">
+                                        <div class="bg-next-500 h-full opacity-20"
+                                            :class="{ 'progress': !state.moving }"
+                                            :style="`animation-duration:${attributes.timer}ms;`">
+                                        </div>
                                     </div>
-                                </template>
-                                <!-- Slider controls -->
-                                <button type="button"
-                                    class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-                                    @click="stopTimer(); prev()" data-carousel-prev>
-                                    <span
-                                        class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 19l-7-7 7-7">
-                                            </path>
-                                        </svg>
-                                        <span class="hidden">Previous</span>
-                                    </span>
-                                </button>
-                                <button type="button"
-                                    class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-                                    @click="stopTimer(); next()" data-carousel-next>
-                                    <span
-                                        class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
-                                            stroke="currentColor" viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        <span class="hidden">Next</span>
-                                    </span>
-                                </button>
-                            </div>
-                            <!-- Slider indicators center div -->
-                            <div class="flex items-center justify-center mt-2 space-x-3">
-                                <template x-if="images.length <= 3">
-                                    <!-- Si hay 3 o menos imágenes, mostrar todos los botones -->
-                                    <template x-for="(image, index) in images" :key="index">
-                                        <button type="button"
+                                </div>
+                                <div aria-live="polite" aria-atomic="true" class="sr-only"
+                                    x-text="'Slide ' + (state.currentSlide + 1) + ' of ' + slides.length">
+                                </div>
+                                <div>
+                                    <template x-for="(slide, index) in Array.from({ length: slides.length })"
+                                        :key="index">
+                                        <button
+                                            class=" text-white inline-flex items-center justify-center bg-gray-600 hover:bg-next-500 w-3 h-3 m-[1px] rounded-full"
+                                            style="text-indent:-9999px"
                                             :class="{
-                                                'bg-next-500': currentIndex === index,
-                                                'bg-gray-700': currentIndex !== index
+                                                'bg-next-500': state.currentSlide == index,
+                                                'focus:outline-none': !state.usedKeyboard,
                                             }"
-                                            class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1"
-                                            @click="stopTimer(); currentIndex = index"
-                                            :data-carousel-slide-to="index"></button>
+                                            @click="stopAutoplay();updateCurrent(index)" x-text="index + 1">
+                                        </button>
                                     </template>
-                                </template>
-                                <template x-if="images.length > 3">
-                                    <!-- Si hay más de 3 imágenes, mostrar solo los botones cercanos -->
-                                    <template x-for="(image, index) in images" :key="index">
-                                        <template
-                                            x-if="Math.abs(currentIndex - index) <= 1 || index === 0 || index === images.length - 1">
-                                            <button type="button"
-                                                :class="{
-                                                    'bg-next-500': currentIndex === index,
-                                                    'bg-gray-700': currentIndex !== index
-                                                }"
-                                                class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1"
-                                                @click="stopTimer(); currentIndex = index"
-                                                :data-carousel-slide-to="index"></button>
-                                        </template>
-                                    </template>
-                                </template>
-                            </div>
+                                </div>
+                            </section>
                         </div>
                         @include('layouts.info-event')
 
@@ -112,7 +68,118 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            {{-- </div> --}}
         </div>
     </div>
+    <script>
+        window.testimonialSlideshow = function(slides) {
+            return {
+                state: {
+                    moving: false,
+                    currentSlide: 0,
+                    looping: false,
+                    order: [],
+                    nextSlideDirection: '',
+                    userInteracted: false,
+                    usedKeyboard: false,
+                },
+                autoplayTimer: null,
+                attributes: {
+                    direction: 'right-left',
+                    duration: 0,
+                    timer: 4000,
+                },
+                slides: [],
+                setup() {
+                    this.slides = slides.map((slide, index) => {
+                        slide.id = index + Date.now();
+                        return slide
+                    })
+
+                    // Cache the original order so that we can reorder on transition (to skip inbetween slides)
+                    this.state.order = this.slides.map(slide => slide.id)
+                    const newSlideOrder = this.slides.filter(slide => this.current.id != slide.id)
+                    newSlideOrder.unshift(this.current)
+                    this.slides = newSlideOrder
+
+                    // Start the autoslide
+                    this.attributes.timer && this.autoPlay()
+                },
+                get current() {
+                    return this.slides.find(slide => slide.id == this.state.order[this.state.currentSlide])
+                },
+                get previousSlide() {
+                    return (this.state.currentSlide - 1) > -1 ? this.state.currentSlide - 1 : this.state
+                        .currentSlide
+                },
+                get nextSlide() {
+                    return (this.state.currentSlide + 1) < this.slides.length ? this.state.currentSlide + 1 : this
+                        .state.currentSlide
+                },
+                updateCurrent(nextSlide) {
+                    if (nextSlide == this.state.currentSlide) return
+                    if (this.state.moving) return
+                    this.state.moving = true
+
+                    const next = this.slides.find(slide => slide.id == this.state.order[nextSlide])
+
+                    // Reorder the slides for a smoother transition
+                    const newSlideOrder = this.slides.filter(slide => {
+                        return ![this.current.id, this.state.order[nextSlide]].includes(slide.id)
+                    })
+
+                    const activeSlides = [this.current, next]
+                    this.state.nextSlideDirection = nextSlide > this.state.currentSlide ? 'right-to-left' :
+                        'left-to-right'
+
+                    newSlideOrder.unshift(...(this.state.nextSlideDirection == 'right-to-left' ? activeSlides :
+                        activeSlides.reverse()))
+                    this.slides = newSlideOrder
+                    this.state.currentSlide = nextSlide
+                    setTimeout(() => {
+                        this.state.moving = false
+                        this.attributes.timer && !this.autoplayTimer && this.autoPlay()
+                    }, this.attributes.duration)
+
+                },
+                transitions(state, $dispatch) {
+                    const rightToLeft = this.state.nextSlideDirection === 'right-to-left'
+                    switch (state) {
+                        case 'enter':
+                            return `transition-all duration-${this.attributes.duration}`
+                        case 'enter-start':
+                            return rightToLeft ? 'transform translate-x-full' : 'transform -translate-x-full'
+                        case 'enter-end':
+                            return 'transform translate-x-0'
+                        case 'leave':
+                            return `absolute top-0 transition-all duration-${this.attributes.duration}`
+                        case 'leave-start':
+                            return 'transform translate-x-0'
+                        case 'leave-end':
+                            return rightToLeft ? 'transform -translate-x-full' : 'transform translate-x-full'
+                    }
+                },
+                autoPlay() {
+                    this.loop = () => {
+                        const next = (this.state.currentSlide === (this.slides.length - 1)) ? 0 : this.state
+                            .currentSlide + 1
+                        this.updateCurrent(this.state.looping ? next : this.currentSlide)
+                        this.autoplayTimer = setTimeout(() => {
+                            requestAnimationFrame(this.loop)
+                        }, this.attributes.timer - 75)
+
+                    }
+                    this.autoplayTimer = setTimeout(() => {
+                        this.state.looping = true
+                        requestAnimationFrame(this.loop)
+                    }, this.attributes.timer)
+                },
+                stopAutoplay() {
+                    clearTimeout(this.autoplayTimer)
+                    this.autoplayTimer = null
+                }
+            }
+        }
+        window.slides = {{ Illuminate\Support\Js::from($images) }};
+    </script>
 </x-app-layout>

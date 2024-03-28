@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     $images = Premio::where('active', true)
         ->where('image', '!=', null)
-        ->select('image')
+        ->select('image', 'name')
         ->get()
         ->map(function ($image) {
             $image->image = asset('storage/events/' . $image->image);
-            return $image;
-        })->pluck('image');
+            return $image->only(['image', 'name']);
+        });
 
     $premios = Premio::where('active', true)
         ->get()
@@ -38,6 +38,20 @@ Route::get('registro', function () {
 Route::get('gracias', function () {
     return view('gracias');
 })->name('gracias');
+
+Route::get('prueba', function () {
+    $images = Premio::where('active', true)
+        ->where('image', '!=', null)
+        ->select('image', 'name')
+        ->get()
+        ->map(function ($image) {
+            $image->image = asset('storage/events/' . $image->image);
+            return $image->only(['image', 'name']);
+        });
+    // return $images;
+    // dd($images);
+    return view('prueba', compact('images'));
+})->name('prueba');
 
 Route::middleware([
     'auth',

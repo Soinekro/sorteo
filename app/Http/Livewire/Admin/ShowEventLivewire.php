@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Premio;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
@@ -27,7 +28,6 @@ class ShowEventLivewire extends Component
     public function render()
     {
         if ($this->readyToLoad) {
-            // sleep(1); // Simulando una carga lenta (4 segundos)
             $events = Premio::all();
         } else {
             $events = [];
@@ -53,7 +53,7 @@ class ShowEventLivewire extends Component
 
     public function save()
     {
-        $image_val = $this->event_id ? '' : '|image|max:2048';
+        $image_val = $this->event_id ? '' : '|image|max:4096';
         $this->validate(
             [
                 'name' => 'required',
@@ -68,36 +68,43 @@ class ShowEventLivewire extends Component
                 'image.max' => 'La imagen no debe pesar más de 2MB',
             ]
         );
-        if ($this->image) {
-            if ($this->event_id) {
-                $event = Premio::find($this->event_id);
-                if ($event->image != $this->image) {
-                    // dd(public_path('storage/events/' . $event->image));
-                    if ($event->image && file_exists(storage_path('app/public/events/' . $event->image))) {
-                        unlink(storage_path('app/public/events/' . $event->image));
+        DB::beginTransaction();
+        try {
+            if ($this->image) {
+                if ($this->event_id) {
+                    $event = Premio::find($this->event_id);
+                    if ($event->image != $this->image) {
+                        if ($event->image && file_exists(storage_path('app/public/events/' . $event->image))) {
+                            unlink(storage_path('app/public/events/' . $event->image));
+                        }
+                        $imgname  = $this->image->store('events', 'public');
+                        $n = explode('/', $imgname)[1];
                     }
-                    $imgname  = $this->image->store('events', 'public');
-                    $n = explode('/', $imgname)[1];
+                } else {
+                    $n = $this->image->store('events', 'public') ?? $this->image;
+                    $n = explode('/', $n)[1];
                 }
-            } else {
-                $n = $this->image;
+                $n = $n ?? $this->image;
             }
+            Premio::updateOrCreate(
+                [
+                    'id' => $this->event_id
+                ],
+                [
+                    'name' => $this->name,
+                    'slug' => Str::slug($this->name),
+                    'description' => $this->description,
+                    'image' => $n,
+                ]
+            );
+
+            DB::commit();
+            $this->resetValues();
+            $this->open = false;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            session()->flash('error', 'Ocurrió un error al intentar guardar el Premio');
         }
-
-        Premio::updateOrCreate(
-            [
-                'id' => $this->event_id
-            ],
-            [
-                'name' => $this->name,
-                'slug' => Str::slug($this->name),
-                'description' => $this->description,
-                'image' => $n ?? $this->image
-            ]
-        );
-
-        $this->resetValues();
-        $this->open = false;
     }
 
     public function resetValues()
@@ -111,13 +118,12 @@ class ShowEventLivewire extends Component
         $this->name = $event->name;
         $this->slug = $event->slug;
         $this->description = $event->description;
-        $this->image = $event->image ? $event->image : null;
+        $this->image = $event->image;
         $this->open = true;
     }
 
     public function changeStatus(Premio $event)
     {
-        // dd($event->active); // Aquí se puede ver el estado actual (true o false
         $event->update([
             'active' => !$event->active
         ]);
