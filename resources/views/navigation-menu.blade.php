@@ -16,9 +16,11 @@
                         {{ __('Registro') }}
                     </x-jet-nav-link>
                     @auth
-                        <x-jet-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
-                            {{ __('Premios') }}
-                        </x-jet-nav-link>
+                        @if (auth()->user()->id == 1)
+                            <x-jet-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
+                                {{ __('Premios') }}
+                            </x-jet-nav-link>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -165,9 +167,11 @@
                 {{ __('Registro') }}
             </x-jet-responsive-nav-link>
             @auth
-                <x-jet-responsive-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
-                    {{ __('Premios') }}
-                </x-jet-responsive-nav-link>
+                @if (auth()->user()->id == 1)
+                    <x-jet-responsive-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
+                        {{ __('Premios') }}
+                    </x-jet-responsive-nav-link>
+                @endif
             @endauth
         </div>
 

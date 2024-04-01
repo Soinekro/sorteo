@@ -25,6 +25,14 @@ class ShowEventLivewire extends Component
     public $price;
     public $image;
 
+    public function mount()
+    {
+       //verificar si el usuario es el 1
+       if (auth()->user()->id != 1) {
+        return redirect()->route('home');
+    }
+    }
+
     public function render()
     {
         if ($this->readyToLoad) {
@@ -56,12 +64,14 @@ class ShowEventLivewire extends Component
         $image_val = $this->event_id ? '' : '|image|max:4096';
         $this->validate(
             [
-                'name' => 'required',
+                'name' => 'required|string|max:255|unique:events,name,' . $this->event_id,
                 'description' => 'required',
                 'image' => 'required' . $image_val,
             ],
             [
                 'name.required' => 'El nombre es requerido',
+                'name.unique' => 'El nombre ya está en uso',
+                'name.max' => 'El nombre no debe ser mayor a 255 caracteres',
                 'description.required' => 'La descripción es requerida',
                 'image.required' => 'La imagen es requerida',
                 'image.image' => 'La imagen debe ser un archivo de imagen',

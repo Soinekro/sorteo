@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Events\UserRegisteredEvent;
 use App\Models\User;
 use App\Traits\AlertTrait;
 use GuzzleHttp\Client;
@@ -97,6 +98,7 @@ class WelcomeFormLivewire extends Component
                     'attended' => false,
                 ]);
                 DB::commit();
+                broadcast(new UserRegisteredEvent($registro))->toOthers();
                 return redirect()->route('gracias');
             } else {
                 $this->addError('cantidad', 'Ya estas registrado, en brebe nos comunicaremos contigo.');
@@ -104,6 +106,7 @@ class WelcomeFormLivewire extends Component
                 return;
             }
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
         }
     }

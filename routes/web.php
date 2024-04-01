@@ -39,24 +39,17 @@ Route::get('gracias', function () {
     return view('gracias');
 })->name('gracias');
 
+//prueba------------------------------------------------------------
 Route::get('prueba', function () {
-    $images = Premio::where('active', true)
-        ->where('image', '!=', null)
-        ->select('image', 'name')
-        ->get()
-        ->map(function ($image) {
-            $image->image = asset('storage/events/' . $image->image);
-            return $image->only(['image', 'name']);
-        });
-    // return $images;
-    // dd($images);
-    return view('prueba', compact('images'));
-})->name('prueba');
+    event(new \App\Events\UserRegisteredEvent(\App\Models\RegisterUser::find(64)));
+    return 'emitiendo evento...';
+})->middleware('first.user')->name('prueba');
+//prueba------------------------------------------------------------
 
 Route::middleware([
     'auth',
     config('jetstream.auth_session'),
-    'verified'
+    'first.user'
 ])->group(function () {
     Route::get('/premios', function () {
         return view('dashboard');
