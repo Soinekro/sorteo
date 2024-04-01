@@ -5,73 +5,75 @@
 .form-input-next {
     @apply text-center border-4 border-next-500 flex items-center w-full max-w-[340px] px-5 py-3 m-auto text-sm font-medium
                     outline-none placeholder:text-gray-700 text-gray-900 rounded-full
-                     focus:border-next-500 focus:ring-0
+                     focus:border-next-500 focus:ring-0;
 }
 
 .form-input-next:focus {
     box-shadow: 0 0 5px #0fb9b9 !important;
 }
 
-[x-cloak] { display: none; }
+[x-cloak] {
+    display: none;
+}
 
 .progress {
-	animation:progress;
-	animation-iteration-count:1;
-	animation-fill-mode:forwards;
-	animation-timing-function:linear;
+    animation: progress;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
 }
 @keyframes progress {
-	0% {
-		width: 0%;
-	}
-	90% {
-		/* opacity: 0; */
-		width: 100%;
-	}
+    0% {
+        width: 0%;
+    }
+    90% {
+        /* opacity: 0; */
+        width: 100%;
+    }
 }
 
 .pulse {
-    animation:pulse;
-	animation-iteration-count:1;
-	animation-fill-mode:forwards;
-	animation-timing-function:linear;
-  /* animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; */
+    animation: pulse;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    /* animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; */
 }
 
 @keyframes pulse {
     0% {
         /* transform: scale(1); */
-        opacity: 0.0;
+        opacity: 0;
     }
-    1%{
+    1% {
         opacity: 0.03;
     }
-    2%{
+    2% {
         opacity: 0.06;
     }
-    3%{
+    3% {
         opacity: 0.09;
     }
-    4%{
+    4% {
         opacity: 0.12;
     }
     5% {
         opacity: 0.15;
     }
     10% {
-        opacity: 0.20;
+        opacity: 0.2;
     }
     15% {
         opacity: 0.25;
     }
     20% {
-        opacity: 0.30;
+        opacity: 0.3;
     }
     25% {
-        opacity: 0.50;
+        opacity: 0.5;
     }
     30% {
-        opacity: 0.70;
+        opacity: 0.7;
     }
     35% {
         opacity: 1;
@@ -80,18 +82,21 @@
         opacity: 0.25;
     }
     96% {
-      opacity: 0.20;
+        opacity: 0.2;
     }
     97% {
-      opacity: 0.15;
+        opacity: 0.15;
     }
     98% {
-      opacity: 0.10;
+        opacity: 0.1;
     }
     99% {
-      opacity: 0.05;
+        opacity: 0.05;
     }
     105% {
         opacity: 0;
     }
+}
+.helvetica {
+    font-family: "Helvetica Neue", sans-serif;
 }

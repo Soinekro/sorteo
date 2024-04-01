@@ -4,6 +4,9 @@ namespace App\Traits;
 
 trait AlertTrait
 {
+    public $readyToLoad = false;
+    public $open = false;
+
     public function alertar($type, $message)
     {
         $this->emit('alert', [
@@ -45,5 +48,10 @@ trait AlertTrait
     public function alertToast($message)
     {
         $this->alertar('toast', $message);
+    }
+
+    public function loadItems()
+    {
+        $this->readyToLoad = true;
     }
 }

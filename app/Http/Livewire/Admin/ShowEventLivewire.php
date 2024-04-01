@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Premio;
+use App\Traits\AlertTrait;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -11,6 +12,7 @@ use Illuminate\Support\Str;
 class ShowEventLivewire extends Component
 {
     use WithFileUploads;
+    use AlertTrait;
 
     public $readyToLoad = false;
     public $open = false;
@@ -41,11 +43,6 @@ class ShowEventLivewire extends Component
             $events = [];
         }
         return view('livewire.admin.show-event-livewire', compact('events'));
-    }
-
-    public function loadItems()
-    {
-        $this->readyToLoad = true;
     }
 
     public function create()

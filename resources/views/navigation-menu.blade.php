@@ -20,6 +20,9 @@
                             <x-jet-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
                                 {{ __('Premios') }}
                             </x-jet-nav-link>
+                            <x-jet-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
+                                {{ __('Solicitudes') }}
+                            </x-jet-nav-link>
                         @endif
                     @endauth
                 </div>
@@ -170,6 +173,9 @@
                 @if (auth()->user()->id == 1)
                     <x-jet-responsive-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
                         {{ __('Premios') }}
+                    </x-jet-responsive-nav-link>
+                    <x-jet-responsive-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
+                        {{ __('Solicitudes') }}
                     </x-jet-responsive-nav-link>
                 @endif
             @endauth

@@ -91,7 +91,9 @@ class WelcomeFormLivewire extends Component
                     'password' => Hash::make($this->dni),
                 ]);
             }
-            if ($user->registerUsers()->where('attended', false)->count() == 0) {
+            if ($user->tickets->count() > 0) {
+                $this->alertError('Ya tiene tickets generados, comuníquese con el administrador.');
+            } elseif ($user->registerUsers()->where('attended', false)->count() == 0) {
                 $registro = $user->registerUsers()->create([
                     'tickets' => $this->cantidad,
                     'accepted_terms' => $this->aceptar,
@@ -106,7 +108,7 @@ class WelcomeFormLivewire extends Component
                 return;
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             DB::rollBack();
         }
     }

@@ -39,6 +39,16 @@ Route::get('gracias', function () {
     return view('gracias');
 })->name('gracias');
 
+Route::get('mis-tickets', function () {
+
+    // sacar pdf mediante tcpf mediante una vista
+    dd(auth()->user()->tickets);
+    // return view('tickets');
+})->name('mis-tickets');
+
+
+
+
 //prueba------------------------------------------------------------
 Route::get('prueba', function () {
     event(new \App\Events\UserRegisteredEvent(\App\Models\RegisterUser::find(64)));
@@ -54,6 +64,9 @@ Route::middleware([
     Route::get('/premios', function () {
         return view('dashboard');
     })->name('premios');
+    Route::get('/solicitudes', function () {
+        return view('solicitudes');
+    })->name('solicitudes');
 });
 
 Route::get('/test', [PdfController::class, 'test'])->name('print.test');

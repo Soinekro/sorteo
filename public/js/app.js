@@ -3366,12 +3366,15 @@ __webpack_require__.r(__webpack_exports__);
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_1__["default"].start();
 var channel = Echo["private"]("user.registered.1"); //se crea un canal para escuchar eventos
-console.log(channel);
 channel.listen(".user.registered.1", function (e) {
-  //para la llamada de eventos se usa el punto y el nombre del evento
-  console.log(e.user);
-  console.table(e.user);
-  alert("User registered");
+  Swal.fire({
+    title: "<strong>Nuevo Registro</strong>",
+    icon: "info",
+    html: "\n          \xA1Un nuevo usuario fue registrado!<br>\n            <b>Nombre:</b> ".concat(e.user.name, "<br>\n            <b>N\xFAmero:</b> ").concat(e.user.phone, "<br>\n            <b>Email:</b> ").concat(e.user.email, "<br>\n            <b>cantidad de tickets:</b> ").concat(e.user.cantidad, "<br>\n            <u><a href=\"solicitudes\">Ver Listado</a></u>\n        "),
+    showCloseButton: false,
+    showCancelButton: false,
+    focusConfirm: false
+  });
 });
 
 /***/ }),

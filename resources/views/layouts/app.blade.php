@@ -14,13 +14,13 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     {{-- <link rel="stylesheet" href="css/app.css"> --}}
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
     {{-- <script src="js/app.js" defer></script> --}}
 </head>
 
-<body class="font-sans antialiased">
+<body class="helvetica antialiased">
     <x-jet-banner />
 
     <div class="min-h-screen bg-gray-100">
@@ -45,7 +45,15 @@
 
     @livewireScripts()
 
+    <script>
+        Livewire.on('alert', (event) => {
+            Swal.fire({
+                text: event.message,
+                icon: event.type,
+            });
 
+        })
+    </script>
 </body>
 
 </html>
