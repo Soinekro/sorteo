@@ -100,7 +100,9 @@ class WelcomeFormLivewire extends Component
                     'attended' => false,
                 ]);
                 DB::commit();
-                broadcast(new UserRegisteredEvent($registro))->toOthers();
+                if ($registro) {
+                    broadcast(new UserRegisteredEvent($registro))->toOthers();
+                }
                 return redirect()->route('gracias');
             } else {
                 $this->addError('cantidad', 'Ya estas registrado, en brebe nos comunicaremos contigo.');

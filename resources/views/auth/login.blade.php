@@ -17,12 +17,12 @@
 
             <div>
                 <x-jet-label for="dni" value="{{ __('DNI') }}" />
-                <x-jet-input id="dni" class="form-input-next mt-1" type="text" name="dni" :value="old('dni')" required autofocus/>
+                <x-jet-input id="dni" class="form-input-next mt-1 border-none" type="text" name="dni" :value="old('dni')" required autofocus/>
             </div>
 
             <div class="mt-4">
                 <x-jet-label for="password" value="{{ __('Contraseña') }}" />
-                <x-jet-input id="password" class="form-input-next mt-1" type="password" name="password" required autocomplete="current-password" />
+                <x-jet-input id="password" class="form-input-next mt-1 border-none" type="password" name="password" required autocomplete="current-password" />
             </div>
 
             <div class="block mt-4">

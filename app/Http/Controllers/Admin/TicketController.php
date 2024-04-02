@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 
-class PdfController extends Controller
+class TicketController extends Controller
 {
     public function mis_tickets()
     {
-        $tickets = Ticket::where('user_id', auth()->id())
-            ->orderBy('id', 'asc')
-            ->paginate(6);
-        if ($tickets->count() > 0) {
+        if (auth()->user()->id > 1) {
+            $tickets = Ticket::where('user_id', auth()->id())
+                ->orderBy('id', 'asc')
+                ->paginate(6);
             $ofertas = [];
             $files = scandir(public_path('img/ofertas'));
             foreach ($files as $file) {
@@ -24,10 +24,11 @@ class PdfController extends Controller
             for ($i = 0; $i <= 3; $i++) {
                 $ofertas_rand[] = $ofertas[array_rand($ofertas)];
             }
-
-            return view('mis_tickets', compact('tickets', 'ofertas_rand'));
         } else {
-            return redirect()->route('home');
+            $tickets = Ticket::orderBy('id', 'asc')
+                ->paginate(12);
+            $ofertas_rand = [];
         }
+        return view('mis_tickets', compact('tickets', 'ofertas_rand'));
     }
 }

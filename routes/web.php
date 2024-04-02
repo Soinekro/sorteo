@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\PdfController;
+use App\Http\Controllers\Admin\TicketController;
 use App\Models\Premio;
 use Illuminate\Support\Facades\Route;
 
@@ -39,7 +39,9 @@ Route::get('gracias', function () {
     return view('gracias');
 })->name('gracias');
 
-Route::middleware('auth')->get('mis-tickets', [PdfController::class, 'mis_tickets'])->name('mis-tickets');
+Route::middleware('auth')
+    ->get('mis-tickets', [TicketController::class, 'mis_tickets'])
+    ->name('mis-tickets');
 
 //prueba------------------------------------------------------------
 Route::get('prueba', function () {
@@ -60,5 +62,3 @@ Route::middleware([
         return view('solicitudes');
     })->name('solicitudes');
 });
-
-Route::get('/test', [PdfController::class, 'test'])->name('print.test');
