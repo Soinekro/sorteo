@@ -39,15 +39,7 @@ Route::get('gracias', function () {
     return view('gracias');
 })->name('gracias');
 
-Route::get('mis-tickets', function () {
-
-    // sacar pdf mediante tcpf mediante una vista
-    dd(auth()->user()->tickets);
-    // return view('tickets');
-})->name('mis-tickets');
-
-
-
+Route::middleware('auth')->get('mis-tickets', [PdfController::class, 'mis_tickets'])->name('mis-tickets');
 
 //prueba------------------------------------------------------------
 Route::get('prueba', function () {

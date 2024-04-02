@@ -12,10 +12,11 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-jet-nav-link href="{{ route('register.form') }}" :active="request()->routeIs('register.form')">
-                        {{ __('Registro') }}
-                    </x-jet-nav-link>
+
                     @auth
+                        <x-jet-nav-link href="{{ route('mis-tickets') }}" :active="request()->routeIs('mis-tickets')">
+                            {{ __('Mis Tickets') }}
+                        </x-jet-nav-link>
                         @if (auth()->user()->id == 1)
                             <x-jet-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
                                 {{ __('Premios') }}
@@ -24,6 +25,10 @@
                                 {{ __('Solicitudes') }}
                             </x-jet-nav-link>
                         @endif
+                    @else
+                        <x-jet-nav-link href="{{ route('register.form') }}" :active="request()->routeIs('register.form')">
+                            {{ __('Registro') }}
+                        </x-jet-nav-link>
                     @endauth
                 </div>
             </div>
@@ -166,10 +171,11 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('register.form') }}" :active="request()->routeIs('register.form')">
-                {{ __('Registro') }}
-            </x-jet-responsive-nav-link>
+
             @auth
+                <x-jet-responsive-nav-link href="{{ route('mis-tickets') }}" :active="request()->routeIs('mis-tickets')">
+                    {{ __('Mis Tickets') }}
+                </x-jet-responsive-nav-link>
                 @if (auth()->user()->id == 1)
                     <x-jet-responsive-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
                         {{ __('Premios') }}
@@ -178,6 +184,10 @@
                         {{ __('Solicitudes') }}
                     </x-jet-responsive-nav-link>
                 @endif
+            @else
+                <x-jet-responsive-nav-link href="{{ route('register.form') }}" :active="request()->routeIs('register.form')">
+                    {{ __('Registro') }}
+                </x-jet-responsive-nav-link>
             @endauth
         </div>
 

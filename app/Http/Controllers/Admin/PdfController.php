@@ -3,36 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request as Psr7Request;
-// use Illuminate\Http\Request;
+use App\Models\Ticket;
 
 class PdfController extends Controller
 {
-    public function test()
+    public function mis_tickets()
     {
-        $client = new Client();
-        $token = config('api_wpp.api_token');
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Authorization' => "Bearer $token",
-        ];
-        $phone = config('api_wpp.api_phone');
-        $phone_id = config('api_wpp.api_id');
-        $api_version = config('api_wpp.api_version');
-        $body = '{
-                    "messaging_product": "whatsapp",
-                    "to": "'.$phone.'",
-                    "type": "template",
-                    "template": {
-                        "name": "prueba",
-                        "language": {
-                        "code": "es"
-                        }
-                    }
-                    }';
-        $request = new Psr7Request('POST', "https://graph.facebook.com/$api_version/$phone_id/messages", $headers, $body);
-        $res = $client->sendAsync($request)->wait();
-        echo $res->getBody();
+        $tickets = Ticket::where('user_id', auth()->id())
+            ->orderBy('id', 'asc')
+            ->paginate(6);
+        if ($tickets->count() > 0) {
+            $ofertas = [];
+            $files = scandir(public_path('img/ofertas'));
+            foreach ($files as $file) {
+                if ($file !== '.' && $file !== '..') {
+                    $ofertas[] = 'img/ofertas/' . $file;
+                }
+            }
+            $ofertas_rand = [];
+            for ($i = 0; $i <= 3; $i++) {
+                $ofertas_rand[] = $ofertas[array_rand($ofertas)];
+            }
+
+            return view('mis_tickets', compact('tickets', 'ofertas_rand'));
+        } else {
+            return redirect()->route('home');
+        }
     }
 }
