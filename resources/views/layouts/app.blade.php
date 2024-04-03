@@ -18,6 +18,7 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
     {{-- <script src="js/app.js" defer></script> --}}
+    @livewireStyles
 </head>
 
 <body class="helvetica antialiased">
@@ -43,7 +44,7 @@
 
     @stack('modals')
 
-    @livewireScripts()
+    @livewireScripts
 
     <script>
         Livewire.on('alert', (event) => {

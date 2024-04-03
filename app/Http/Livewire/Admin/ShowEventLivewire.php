@@ -45,7 +45,7 @@ class ShowEventLivewire extends Component
     public function render()
     {
         if ($this->readyToLoad) {
-            $events = Premio::paginate(4);
+            $events = Premio::paginate(6);
             $tickets = Ticket::orderBy('id', 'asc')->paginate(6);
         } else {
             $events = [];
@@ -157,7 +157,9 @@ class ShowEventLivewire extends Component
                             'active' => true
                         ]);
                     });
-                    $sorteopremio->delete();
+                    $sorteopremio->update([
+                        'active' => false
+                    ]);
                 }
                 DB::commit();
                 $this->alertInfo('Premio activado correctamente , se ha eliminado el sorteo anterior');
@@ -183,14 +185,12 @@ class ShowEventLivewire extends Component
         try {
             $tickets = Ticket::where('active', true)->pluck('ticket')->toArray();
             //reordenar todos los tickets
-            for ($i = 1; $i <= 3; $i++) {
-                shuffle($tickets);
-            }
-            $rand = rand(0, count($tickets) - 1);
+            // for ($i = 1; $i <= 3; $i++) {
+            shuffle($tickets);
+            // }
+            $rand = mt_rand(0, count($tickets) - 1);
             $ticket = $tickets[$rand];
-            sleep(5);
             $this->ganador = Ticket::where('ticket', $ticket)->first();
-
             $this->ganador->user->tickets()->each(function ($ticket) {
                 $ticket->update([
                     'active' => false
@@ -204,7 +204,7 @@ class ShowEventLivewire extends Component
                 'ticket_id' => $this->ganador->id,
             ]);
             DB::commit();
-            $this->emit('confeti');
+            $this->emit('ruleta', $this->ganador);
         } catch (\Exception $e) {
             $this->emit('confeti-stop');
             DB::rollBack();

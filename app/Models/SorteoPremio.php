@@ -25,4 +25,9 @@ class SorteoPremio extends Model
     {
         return $this->belongsTo(Ticket::class);
     }
+
+    public function scopeLastWinner($query)
+    {
+        return $query->where('active', true)->latest('id')->first();
+    }
 }

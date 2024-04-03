@@ -2,7 +2,8 @@
     <!-- button to create event -->
     <div class="flex justify-end">
         <button wire:click="resetSorteos"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-3 mx-1">Reiniciar Sorteos</button>
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-3 mx-1">Reiniciar
+            Sorteos</button>
         <button wire:click="create"
             class="bg-next-500 hover:bg-next-700 text-white font-bold py-2 px-4 rounded mb-3 mx-1">Crear Premio</button>
     </div>
@@ -66,7 +67,8 @@
                             <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                                 @if ($item->sorteado->first() != null)
-                                    {{ $item->sorteado->first()->ticket->ticket }} - {{ $item->sorteado->first()->ticket->user->name}}
+                                    {{ $item->sorteado()->lastWinner()->ticket->ticket }} -
+                                    {{ $item->sorteado->first()->ticket->user->name }}
                                 @else
                                     <span class="ml-3 font-bold text-gray-900"> Sin Ganador</span>
                                 @endif
@@ -129,7 +131,7 @@
             {{-- <!-- pantalla de carga --> --}}
             <x-next.next-loader />
         @endif
-        <div class="hidden"  wire:loading wire:target="resetSorteos,changeStatus" wire:loading.class="block">
+        <div class="hidden" wire:loading wire:target="resetSorteos,changeStatus" wire:loading.class="block">
             <x-next.next-loader />
         </div>
     </div>
@@ -191,22 +193,32 @@
             <x-slot name="content">
                 @php
                     $url = asset('storage/events/' . $premio->image);
-
                 @endphp
                 <div class="relative flex flex-col">
                     <img src="{{ $url }}" class="p-2 mx-auto" alt=""
                         style="max-height: 400px; max-width: 400px;">
                     @if ($ganador != null)
-                        <h1 class="text-center text-2xl font-bold">Ganador</h1>
-                        <div class="flex justify-center">
-                            <div class="flex flex-col items-center">
-                                <span class="ml-3 font-bold text-gray-900"> {{ $ganador->ticket ?? '' }}</span>
-                                <span class="ml-3 font-bold text-gray-900"> {{ $ganador->user->name ?? '' }}</span>
+                        {{-- darle clase de texto borroso --}}
+                        <div id="winner" class="blur-sm">
+                            <h1 class="text-center text-2xl font-bold">Ganador</h1>
+                            <div class="flex justify-center">
+                                <div class="flex flex-col items-center">
+                                    <span id="winner-ticket" class="ml-3 font-bold text-gray-900">
+                                        @if ($premio->active == false && $ganador != null)
+                                            {{ $ganador->ticket }}
+                                        @endif
+                                    </span>
+                                    <span id="winner-name" class="ml-3 font-bold text-gray-900">
+                                        @if ($premio->active == false && $ganador != null)
+                                            {{ $ganador->user->name }}
+                                        @endif
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     @endif
-                    <div class="hidden absolute top-0 right-0 h-full w-full bg-white opacity-85" wire:loading.block
-                        wire:target="sortear">
+                    <div id="rulet" class="hidden absolute top-0 right-0 h-full w-full bg-white opacity-75"
+                        {{-- wire:loading.block wire:target="sortear" --}}>
                         <img src="{{ asset('gifs/RULETA.gif') }}" alt="" class="h-full w-full">
                     </div>
             </x-slot>
@@ -215,11 +227,30 @@
                     {{ __('Cancelar') }}
                 </x-jet-secondary-button>
                 @if ($premio->active)
-                    <x-jet-button class="ml-2" wire:click="sortear" wire:loading.attr="disabled">
+                    <x-jet-button class="ml-2" onclick="ruleta()" wire:click="sortear"
+                        wire:loading.attr="disabled">
                         {{ __('Sortear') }}
                     </x-jet-button>
                 @endif
             </x-slot>
         </x-jet-dialog-modal>
     @endif
+
+    <script>
+        document.addEventListener('livewire:load', function() {
+            window.livewire.on('ruleta', (response) => {
+                divruleta = document.getElementById('rulet');
+                divruleta.classList.remove('hidden');
+                setTimeout(() => {
+                    divwinner = document.getElementById('winner');
+                    // console.log(divwinner);
+                    divwinner.classList.remove('blur-sm');
+                    divruleta.classList.add('hidden');
+                    document.getElementById('winner-ticket').innerText = response.ticket;
+                    document.getElementById('winner-name').innerText = response.user.name;
+                    poof(true);
+                }, 5000);
+            })
+        });
+    </script>
 </div>
