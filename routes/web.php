@@ -45,7 +45,7 @@ Route::middleware('auth')
 
 //prueba------------------------------------------------------------
 Route::get('prueba', function () {
-    event(new \App\Events\UserRegisteredEvent(\App\Models\RegisterUser::find(64)));
+    // event(new \App\Events\UserRegisteredEvent(\App\Models\RegisterUser::find(64)));
     return 'emitiendo evento...';
 })->middleware('first.user')->name('prueba');
 //prueba------------------------------------------------------------

@@ -1,8 +1,8 @@
-<div wire:init="loadItems">
+<div wire:init="loadItems" class="m-3">
     <!-- button to create event -->
     <div class="flex justify-end">
         <button wire:click="create"
-            class="bg-next-500 hover:bg-next-700 text-white font-bold py-2 px-4 rounded my-3">Crear Premio</button>
+            class="bg-next-500 hover:bg-next-700 text-white font-bold py-2 px-4 rounded mb-3">Crear Premio</button>
     </div>
     <div class="block w-full {{-- overflow-x-auto --}}">
         @if (count($events))
@@ -20,13 +20,16 @@
                             Estado</th>
                         <th
                             class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
+                            Ganador</th>
+                        <th
+                            class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-pink-800 text-pink-300 border-pink-700">
 
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($events as $item)
-                        <tr>
+                        <tr wire:key="{{ $item->id }}">
                             <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                                 <img src="{{ asset('storage/events/' . $item->image) }}"
@@ -62,6 +65,14 @@
                                 </div>
                             </td>
                             <td
+                                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                @if ($item->sorteado->first() != null)
+                                    {{ $item->sorteado->first()->ticket->ticket }} - {{ $item->sorteado->first()->ticket->user->name}}
+                                @else
+                                    <span class="ml-3 font-bold text-gray-900"> Sin Ganador</span>
+                                @endif
+                            </td>
+                            <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                                 <!-- Contenido de la celda -->
                                 <div class="relative" x-data="{ open: false }">
@@ -78,19 +89,35 @@
                                     </button>
                                     {{-- <!-- Dropdown --> --}}
                                     <div x-show="open" @click.outside="open = false"
-                                    class="absolute bg-white text-base z-50 top-full left-0 w-full whitespace-nowrap rounded shadow-lg"
+                                        class="absolute bg-white text-base z-50 top-full left-0 w-full whitespace-nowrap rounded shadow-lg"
                                         id="table-dark-1-dropdown-{{ $item->id }}">
                                         <!-- Opciones del dropdown -->
-                                        <div wire:click="edit({{ $item }})"
-                                            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer">
+                                        <div wire:click="edit('{{ $item->id }}')" @click="open = false"
+                                            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:bg-gray-500 text-blueGray-700 cursor-pointer">
                                             Editar
                                         </div>
+                                        @if ($item->image != null)
+                                            <div wire:click="sorteo('{{ $item->id }}')" @click="open = false"
+                                                class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-next-500 hover:bg-next-700 text-blueGray-700 cursor-pointer">
+                                                Sortear
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <div
+                                class="bg-white px-4 py-3 items-center justify-between border-t border-gray-200 sm:px-6">
+                                {{ $events->links() }}
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         @elseif ($events != [])
             <tr>
@@ -108,7 +135,7 @@
         <!-- modal -->
         <x-jet-dialog-modal wire:model="open">
             <x-slot name="title">
-                {{__('Premio')}}
+                {{ __('Premio') }}
             </x-slot>
             <x-slot name="content">
                 <div class="flex flex-col gap-3">
@@ -137,18 +164,59 @@
                                     $url = $image->temporaryUrl();
                                 }
                             @endphp
-                            <img src="{{ $url }}" class="p-2 mx-auto" alt="" style="max-height: 400px; max-width: 400px;">
+                            <img src="{{ $url }}" class="p-2 mx-auto" alt=""
+                                style="max-height: 400px; max-width: 400px;">
                         @endif
                         <x-jet-input-error for="image" class="mt-2" />
                     </div>
             </x-slot>
             <x-slot name="footer">
-                <x-jet-secondary-button wire:click="closeModal" wire:loading.attr="disabled">
+                <x-jet-secondary-button wire:click="closeModal">
                     {{ __('Cancelar') }}
                 </x-jet-secondary-button>
                 <x-jet-button class="ml-2" wire:click="save" wire:loading.attr="disabled">
                     {{ __('Guardar') }}
                 </x-jet-button>
+            </x-slot>
+        </x-jet-dialog-modal>
+    @endif
+    @if ($showSorteo)
+        <!-- modal -->
+        <x-jet-dialog-modal wire:model="showSorteo">
+            <x-slot name="title">
+                {{ __('Sorteo de ') . $premio->name }}
+            </x-slot>
+            <x-slot name="content">
+                @php
+                    $url = asset('storage/events/' . $premio->image);
+
+                @endphp
+                <div class="relative flex flex-col">
+                    <img src="{{ $url }}" class="p-2 mx-auto" alt=""
+                        style="max-height: 400px; max-width: 400px;">
+                    @if ($ganador != null)
+                        <h1 class="text-center text-2xl font-bold">Ganador</h1>
+                        <div class="flex justify-center">
+                            <div class="flex flex-col items-center">
+                                <span class="ml-3 font-bold text-gray-900"> {{ $ganador->ticket ?? '' }}</span>
+                                <span class="ml-3 font-bold text-gray-900"> {{ $ganador->user->name ?? '' }}</span>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="hidden absolute top-0 right-0 h-full w-full bg-white opacity-85" wire:loading.block
+                        wire:target="sortear">
+                        <img src="{{ asset('gifs/RULETA.gif') }}" alt="" class="h-full w-full">
+                    </div>
+            </x-slot>
+            <x-slot name="footer">
+                <x-jet-secondary-button wire:click="cerrarSorteo">
+                    {{ __('Cancelar') }}
+                </x-jet-secondary-button>
+                @if ($premio->active)
+                    <x-jet-button class="ml-2" wire:click="sortear" wire:loading.attr="disabled">
+                        {{ __('Sortear') }}
+                    </x-jet-button>
+                @endif
             </x-slot>
         </x-jet-dialog-modal>
     @endif

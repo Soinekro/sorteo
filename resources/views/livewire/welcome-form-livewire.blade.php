@@ -100,16 +100,4 @@
             </x-slot>
         </x-jet-dialog-modal>
     @endif
-
-    <script>
-        //para el dni solo numeros y hasta 8 digitos
-        document.getElementById('dni').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 8);
-        });
-
-        //para el telefono solo numeros y hasta 9 digitos
-        document.getElementById('phone').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9);
-        });
-    </script>
 </div>

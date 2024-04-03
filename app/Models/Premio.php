@@ -23,4 +23,9 @@ class Premio extends Model
     {
         return ucfirst($value);
     }
+
+    public function sorteado()
+    {
+        return $this->hasMany(SorteoPremio::class);
+    }
 }

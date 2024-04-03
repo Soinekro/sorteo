@@ -3,15 +3,19 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Premio;
+use App\Models\SorteoPremio;
+use App\Models\Ticket;
 use App\Traits\AlertTrait;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
+use Livewire\WithPagination;
 
 class ShowEventLivewire extends Component
 {
     use WithFileUploads;
+    use WithPagination;
     use AlertTrait;
 
     public $readyToLoad = false;
@@ -27,22 +31,27 @@ class ShowEventLivewire extends Component
     public $price;
     public $image;
 
+    public $showSorteo = false;
+    public Premio $premio;
+    public $ganador;
     public function mount()
     {
-       //verificar si el usuario es el 1
-       if (auth()->user()->id != 1) {
-        return redirect()->route('home');
-    }
+        //verificar si el usuario es el 1
+        if (auth()->user()->id != 1) {
+            return redirect()->route('home');
+        }
     }
 
     public function render()
     {
         if ($this->readyToLoad) {
-            $events = Premio::all();
+            $events = Premio::paginate(4);
+            $tickets = Ticket::orderBy('id', 'asc')->paginate(6);
         } else {
             $events = [];
+            $tickets = [];
         }
-        return view('livewire.admin.show-event-livewire', compact('events'));
+        return view('livewire.admin.show-event-livewire', compact('events', 'tickets'));
     }
 
     public function create()
@@ -131,8 +140,83 @@ class ShowEventLivewire extends Component
 
     public function changeStatus(Premio $event)
     {
-        $event->update([
-            'active' => !$event->active
-        ]);
+        if ($event->active) {
+            $event->update([
+                'active' => false
+            ]);
+        } else {
+            DB::beginTransaction();
+            try {
+                $event->update([
+                    'active' => true
+                ]);
+                $sorteopremio = SorteoPremio::where('premio_id', $event->id)->first() ?? null;
+                if ($sorteopremio->count() > 0) {
+                    $sorteopremio->ticket->user->tickets()->each(function ($ticket) {
+                        $ticket->update([
+                            'active' => true
+                        ]);
+                    });
+                    $sorteopremio->delete();
+                }
+                DB::commit();
+                $this->alertInfo('Premio activado correctamente , se ha eliminado el sorteo anterior');
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+                DB::rollBack();
+                $this->alertError('Ocurrió un error al intentar activar el premio');
+            }
+        }
+    }
+
+    public function sorteo(Premio $event)
+    {
+        $this->emit('confeti-stop');
+        $this->showSorteo = true;
+        $this->event_id = $event->id;
+        $this->premio = $event;
+        $this->ganador = $event->sorteado->first()->ticket ?? null;
+    }
+
+    public function sortear()
+    {
+        DB::beginTransaction();
+        try {
+            $tickets = Ticket::where('active', true)->pluck('ticket')->toArray();
+            //reordenar todos los tickets
+            for ($i = 1; $i <= 3; $i++) {
+                shuffle($tickets);
+            }
+            $rand = rand(0, count($tickets) - 1);
+            $ticket = $tickets[$rand];
+            // sleep(5);
+            $this->ganador = Ticket::where('ticket', $ticket)->first();
+
+            $this->ganador->user->tickets()->each(function ($ticket) {
+                $ticket->update([
+                    'active' => false
+                ]);
+            });
+            $this->premio->update([
+                'active' => false
+            ]);
+            // dd($this->ganador);
+            SorteoPremio::create([
+                'premio_id' => $this->event_id,
+                'ticket_id' => $this->ganador->id,
+            ]);
+            DB::commit();
+            $this->emit('confeti');
+        } catch (\Exception $e) {
+            $this->emit('confeti-stop');
+            DB::rollBack();
+            $this->alertError('Ocurrió un error al intentar sortear el premio');
+        }
+    }
+
+    public function cerrarSorteo()
+    {
+        $this->showSorteo = false;
+        $this->emit('confeti-stop');
     }
 }
