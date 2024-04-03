@@ -1,68 +1,71 @@
 <div>
-        <!-- formulario -->
-        <form class="flex flex-col h-full w-full pb-6 text-center rounded-3xl gap-4" wire:submit.prevent="save"
-            wire:loading.class="opacity-50">
-            <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="m-auto sm:w-60 w-48">
+    <!-- formulario -->
+    <form class="flex flex-col h-full w-full pb-6 text-center rounded-3xl gap-4" wire:submit.prevent="save"
+        wire:loading.class="opacity-50">
+        <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="m-auto sm:w-60 w-48">
 
-            <h1 class="text-2xl font-bold text-center text-grey-900 dark:text-grey-100">
-                Datos
-            </h1>
-            <div class="mx-2">
-                <input id="dni" type="numeric" placeholder="87654321*" class="form-input-next" wire:model="dni"
-                    autocomplete="off" />
-                <x-jet-input-error for="dni" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
-                <input id="name" type="text" placeholder="NOMBRES Y APELLIDOS*" class="form-input-next"
-                    @if ($name != null) disabled @endif wire:model="name" autocomplete="off" />
-                <x-jet-input-error for="name" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
-                <input id="phone" type="text" placeholder="CELULAR*" class="form-input-next" autocomplete="off"
-                    wire:model.defer="phone" />
-                <x-jet-input-error for="phone" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
-                <input id="email" type="email" placeholder="CORREO ELECTRÓNICO*" class="form-input-next"
-                    wire:model.defer="email" autocomplete="off" />
-                <x-jet-input-error for="email" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
-                <select id="cantidad" class="form-input-next" wire:model.defer="cantidad" autocomplete="off">
-                    <option value="0">CANTIDAD DE TICKETS*</option>
-                    @for ($i = 1; $i <= 10; $i++)
-                        <option value="{{ $i }}" class="text-center">
-                            {{ $i }}
-                        </option>
-                    @endfor
-                </select>
-                <x-jet-input-error for="cantidad" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
-                <label class="flex flex-inline justify-center cursor-pointer select-none">
-                    <input id="terms" type="checkbox" wire:model="aceptar"
-                        class="w-4 h-4 border-2 border-next-500 text-next-600 rounded focus:ring-next-500 dark:focus:ring-next-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <p class="ml-2 text-sm leading-relaxed text-gray-900">Aceptas nuestros <button type="button"
-                            wire:click="displayPolicies"
-                            class="font-bold text-gray-700 underline">{{ __('Términos y condiciones') }}</button>?
-                    </p>
-                </label>
-                <x-jet-input-error for="aceptar" class="mt-2 text-red-500" />
-            </div>
-            <div class="mx-2">
+        <h1 class="text-2xl font-bold text-center text-grey-900 dark:text-grey-100">
+            Datos
+        </h1>
+        <div class="mx-2">
+            <input id="dni" type="numeric" placeholder="87654321*" class="form-input-next" wire:model="dni"
+                autocomplete="off" />
+            <x-jet-input-error for="dni" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <input id="name" type="text" placeholder="NOMBRES Y APELLIDOS*" class="form-input-next"
+                @if ($name != null) disabled @endif wire:model="name" autocomplete="off" />
+            <x-jet-input-error for="name" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <input id="phone" type="text" placeholder="CELULAR*" class="form-input-next" autocomplete="off"
+                wire:model.defer="phone" />
+            <x-jet-input-error for="phone" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <input id="email" type="email" placeholder="CORREO ELECTRÓNICO*" class="form-input-next"
+                wire:model.defer="email" autocomplete="off" />
+            <x-jet-input-error for="email" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <select id="cantidad" class="form-input-next" wire:model.defer="cantidad" autocomplete="off">
+                <option value="0">CANTIDAD DE TICKETS*</option>
+                @for ($i = 1; $i <= 10; $i++)
+                    <option value="{{ $i }}" class="text-center">
+                        {{ $i }}
+                    </option>
+                @endfor
+            </select>
+            <x-jet-input-error for="cantidad" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <label class="flex flex-inline justify-center cursor-pointer select-none">
+                <input id="terms" type="checkbox" wire:model="aceptar"
+                    class="w-4 h-4 border-2 border-next-500 text-next-600 rounded focus:ring-next-500 dark:focus:ring-next-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <p class="ml-2 text-sm leading-relaxed text-gray-900">Aceptas nuestros <button type="button"
+                        wire:click="displayPolicies"
+                        class="font-bold text-gray-700 underline">{{ __('Términos y condiciones') }}</button>?
+                </p>
+            </label>
+            <x-jet-input-error for="aceptar" class="mt-2 text-red-500" />
+        </div>
+        <div class="mx-2">
+            <div class="w-full flex items-center justify-center mt-1 h-16">
                 <button
-                    class="w-full mx-auto py-5 text-xl font-bold leading-none text-white transition
-                        duration-300 md:max-w-72 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
+                    class="m-auto w-64 h-12 py-2 text-3xl font-bold leading-none text-white transition uppercase text-center
+                    hover:w-full hover:h-full hover:py-4
+                            duration-300 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
                     {{ __('Solicitar') }}
                 </button>
             </div>
-            <div class="flex items-center justify-center mt-1 text-sm text-gray-900">
-                <p>{{ __('¿Ya tienes una cuenta?') }} <a href="{{ route('login') }}"
-                        class="font-bold text-next-500 hover:text-next-600">{{ __('Inicia sesión') }}</a></p>
-            </div>
+        </div>
+        <div class="flex items-center justify-center mt-1 text-sm text-gray-900">
+            <p>{{ __('¿Ya tienes una cuenta?') }} <a href="{{ route('login') }}"
+                    class="font-bold text-next-500 hover:text-next-600">{{ __('Inicia sesión') }}</a></p>
+        </div>
 
-            @include('layouts.info-event')
-        </form>
+        @include('layouts.info-event')
+    </form>
     {{-- terminos y condiciones --}}
     @if ($showTerms)
         <x-jet-dialog-modal wire:model="showTerms">
@@ -100,4 +103,15 @@
             </x-slot>
         </x-jet-dialog-modal>
     @endif
+    <script>
+        //para el dni solo numeros y hasta 8 digitos
+        document.getElementById('dni').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 8);
+        });
+
+        //para el telefono solo numeros y hasta 9 digitos
+        document.getElementById('phone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 9);
+        });
+    </script>
 </div>

@@ -1,8 +1,10 @@
 <div wire:init="loadItems" class="m-3">
     <!-- button to create event -->
     <div class="flex justify-end">
+        <button wire:click="resetSorteos"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-3 mx-1">Reiniciar Sorteos</button>
         <button wire:click="create"
-            class="bg-next-500 hover:bg-next-700 text-white font-bold py-2 px-4 rounded mb-3">Crear Premio</button>
+            class="bg-next-500 hover:bg-next-700 text-white font-bold py-2 px-4 rounded mb-3 mx-1">Crear Premio</button>
     </div>
     <div class="block w-full {{-- overflow-x-auto --}}">
         @if (count($events))
@@ -41,9 +43,6 @@
                                 <i class="fas fa-circle text-orange-500 mr-2"></i>{{ $item->description }}
                             </td>
                             <td class="td-table-main">
-                                <div class="head-to-td-table-main font-bold">
-                                    {{ __('Status') }}:
-                                </div>
                                 <div class="ml-2">
                                     <button type="button"
                                         class="relative inline-flex items-center @if ($item->active) fill-next-500 @else fill-red-500 @endif"
@@ -96,7 +95,7 @@
                                             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:bg-gray-500 text-blueGray-700 cursor-pointer">
                                             Editar
                                         </div>
-                                        @if ($item->image != null)
+                                        @if ($item->image != null && $item->active)
                                             <div wire:click="sorteo('{{ $item->id }}')" @click="open = false"
                                                 class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-next-500 hover:bg-next-700 text-blueGray-700 cursor-pointer">
                                                 Sortear
@@ -110,7 +109,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="5">
                             <div
                                 class="bg-white px-4 py-3 items-center justify-between border-t border-gray-200 sm:px-6">
                                 {{ $events->links() }}
@@ -130,6 +129,9 @@
             {{-- <!-- pantalla de carga --> --}}
             <x-next.next-loader />
         @endif
+        <div class="hidden"  wire:loading wire:target="resetSorteos,changeStatus" wire:loading.class="block">
+            <x-next.next-loader />
+        </div>
     </div>
     @if ($open)
         <!-- modal -->

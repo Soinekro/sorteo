@@ -51,7 +51,6 @@ class ShowSolicitudesLivewire extends Component
             DB::commit();
             $this->alertSuccess('Ticket generado correctamente');
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             DB::rollBack();
             $this->alertError('Error al generar ticket');
         }
@@ -68,13 +67,13 @@ class ShowSolicitudesLivewire extends Component
 
         $this->validate(
             [
-                'tickets' => 'required|numeric|min:1|max:10'
+                'tickets' => 'required|numeric|min:1'
             ],
             [
                 'tickets.required' => 'El campo es requerido',
                 'tickets.numeric' => 'El campo debe ser numerico',
                 'tickets.min' => 'El campo debe ser mayor a 0',
-                'tickets.max' => 'El campo debe ser menor o igual a 10'
+                // 'tickets.max' => 'El campo debe ser menor o igual a 10'
             ]
         );
         DB::beginTransaction();

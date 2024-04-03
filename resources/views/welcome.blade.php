@@ -1,74 +1,72 @@
 <x-app-layout>
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            {{-- <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg"> --}}
-                <div class="flex items-center justify-center w-full">
-                    <div
-                        class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
-                        <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="sm:w-60 w-48">
-                        <h2 class="text-3xl font-bold text-gray-800">
-                            {{ $premios }} Premios
-                        </h2>
-                        <div class="w-full md:w-80 p-4 flex items-center justify-center">
-                            <section class="flex flex-col items-center justify-center w-full"
-                                @keydown.arrow-right="state.usedKeyboard = true;updateCurrent(nextSlide)"
-                                @keydown.arrow-left="state.usedKeyboard = true;updateCurrent(previousSlide)"
-                                @keydown.window.tab="state.usedKeyboard = true" x-data="testimonialSlideshow(slides)"
-                                x-title="Quotes Slideshow" x-init="setup()">
-                                <div tabindex="1" class="relative w-full rounded-2xl overflow-hidden mb-6 bg-gray-300"
-                                    :class="{ 'focus:outline-none': !state.usedKeyboard }">
-                                    <template x-for="(slide, index) in slides" :key="slide.id">
-                                        <div :aria-hidden="(state.order[state.currentSlide] != slide.id).toString()">
-                                            <div x-show="state.order[state.currentSlide] == slide.id"
-                                                :x-ref="slide.id" :x-transition:enter="transitions('enter')"
-                                                :x-transition:enter-start="transitions('enter-start')"
-                                                :x-transition:enter-end="transitions('enter-end')"
-                                                :x-transition:leave="transitions('leave')"
-                                                :x-transition:leave-start="transitions('leave-start')"
-                                                :x-transition:leave-end="transitions('leave-end')">
-                                                <img :src="slide.image" :alt="'Slide ' + (index + 1)"
-                                                    class="w-full rounded-2xl"
-                                                    :class="{ 'animate-pulse': !state.moving }"
-                                                    :style="`animation-duration:${attributes.timer}ms;`">
-                                            </div>
-                                        </div>
-                                    </template>
-                                    <div x-cloak class="w-full h-full absolute top-0 ">
-                                        <div class="bg-next-500 h-full opacity-20"
-                                            :class="{ 'progress': !state.moving }"
-                                            :style="`animation-duration:${attributes.timer}ms;`">
+            <div class="flex items-center justify-center w-full">
+                <div class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
+                    <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="sm:w-60 w-48">
+                    <h2 class="text-3xl font-bold text-gray-800">
+                        {{ $premios }} Premios
+                    </h2>
+                    <div class="w-full md:w-80 flex items-center justify-center">
+                        <section class="flex flex-col items-center justify-center w-full"
+                            @keydown.arrow-right="state.usedKeyboard = true;updateCurrent(nextSlide)"
+                            @keydown.arrow-left="state.usedKeyboard = true;updateCurrent(previousSlide)"
+                            @keydown.window.tab="state.usedKeyboard = true" x-data="testimonialSlideshow(slides)"
+                            x-title="Quotes Slideshow" x-init="setup()">
+                            <div tabindex="1" class="relative w-full rounded-2xl overflow-hidden mb-6 bg-gray-300"
+                                :class="{ 'focus:outline-none': !state.usedKeyboard }">
+                                <template x-for="(slide, index) in slides" :key="slide.id">
+                                    <div :aria-hidden="(state.order[state.currentSlide] != slide.id).toString()">
+                                        <div x-show="state.order[state.currentSlide] == slide.id" :x-ref="slide.id"
+                                            :x-transition:enter="transitions('enter')"
+                                            :x-transition:enter-start="transitions('enter-start')"
+                                            :x-transition:enter-end="transitions('enter-end')"
+                                            :x-transition:leave="transitions('leave')"
+                                            :x-transition:leave-start="transitions('leave-start')"
+                                            :x-transition:leave-end="transitions('leave-end')">
+                                            <img :src="slide.image" :alt="'Slide ' + (index + 1)"
+                                                class="w-full rounded-2xl" :class="{ 'animate-pulse': !state.moving }"
+                                                :style="`animation-duration:${attributes.timer}ms;`">
                                         </div>
                                     </div>
+                                </template>
+                                <div x-cloak class="w-full h-full absolute top-0 ">
+                                    <div class="bg-next-500 h-full opacity-20" :class="{ 'progress': !state.moving }"
+                                        :style="`animation-duration:${attributes.timer}ms;`">
+                                    </div>
                                 </div>
-                                <div aria-live="polite" aria-atomic="true" class="sr-only"
-                                    x-text="'Slide ' + (state.currentSlide + 1) + ' of ' + slides.length">
-                                </div>
-                                <div>
-                                    <template x-for="(slide, index) in Array.from({ length: slides.length })"
-                                        :key="index">
-                                        <button
-                                            class=" text-white inline-flex items-center justify-center bg-gray-600 hover:bg-next-500 w-3 h-3 m-[1px] rounded-full"
-                                            style="text-indent:-9999px"
-                                            :class="{
-                                                'bg-next-500': state.currentSlide == index,
-                                                'focus:outline-none': !state.usedKeyboard,
-                                            }"
-                                            @click="stopAutoplay();updateCurrent(index)" x-text="index + 1">
-                                        </button>
-                                    </template>
-                                </div>
-                            </section>
-                        </div>
-                        @include('layouts.info-event')
+                            </div>
+                            <div aria-live="polite" aria-atomic="true" class="sr-only"
+                                x-text="'Slide ' + (state.currentSlide + 1) + ' of ' + slides.length">
+                            </div>
+                            <div class="-my-4">
+                                <template x-for="(slide, index) in Array.from({ length: slides.length })"
+                                    :key="index">
+                                    <button
+                                        class=" text-white inline-flex items-center justify-center bg-gray-600 hover:bg-next-500 w-3 h-3 m-[1px] rounded-full"
+                                        style="text-indent:-9999px"
+                                        :class="{
+                                            'bg-next-500': state.currentSlide == index,
+                                            'focus:outline-none': !state.usedKeyboard,
+                                        }"
+                                        @click="stopAutoplay();updateCurrent(index)" x-text="index + 1">
+                                    </button>
+                                </template>
+                            </div>
+                        </section>
+                    </div>
+                    @include('layouts.info-event')
 
+                    <div class="w-full flex items-center justify-center mt-1 h-16">
                         <a href="{{ route('register.form') }}"
-                            class="w-full px-2 py-5 text-3xl font-bold leading-none text-white transition uppercase text-center
+                            class="m-auto w-64 h-12 py-2 text-3xl font-bold leading-none text-white transition uppercase text-center
+                        hover:w-full hover:h-full hover:py-4
                                 duration-300 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
                             {{ __('Participar') }}
                         </a>
                     </div>
                 </div>
-            {{-- </div> --}}
+            </div>
         </div>
     </div>
     <script>
@@ -166,13 +164,13 @@
                         this.updateCurrent(this.state.looping ? next : this.currentSlide)
                         this.autoplayTimer = setTimeout(() => {
                             requestAnimationFrame(this.loop)
-                        }, this.attributes.timer - 75)
+                        }, this.attributes.timer - 300)
 
                     }
                     this.autoplayTimer = setTimeout(() => {
                         this.state.looping = true
                         requestAnimationFrame(this.loop)
-                    }, this.attributes.timer)
+                    }, this.attributes.timer -300)
                 },
                 stopAutoplay() {
                     clearTimeout(this.autoplayTimer)

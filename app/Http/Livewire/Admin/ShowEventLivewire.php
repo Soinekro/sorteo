@@ -32,7 +32,7 @@ class ShowEventLivewire extends Component
     public $image;
 
     public $showSorteo = false;
-    public Premio $premio;
+    public $premio;
     public $ganador;
     public function mount()
     {
@@ -151,7 +151,7 @@ class ShowEventLivewire extends Component
                     'active' => true
                 ]);
                 $sorteopremio = SorteoPremio::where('premio_id', $event->id)->first() ?? null;
-                if ($sorteopremio->count() > 0) {
+                if ($sorteopremio != null) {
                     $sorteopremio->ticket->user->tickets()->each(function ($ticket) {
                         $ticket->update([
                             'active' => true
@@ -162,7 +162,6 @@ class ShowEventLivewire extends Component
                 DB::commit();
                 $this->alertInfo('Premio activado correctamente , se ha eliminado el sorteo anterior');
             } catch (\Exception $e) {
-                dd($e->getMessage());
                 DB::rollBack();
                 $this->alertError('Ocurrió un error al intentar activar el premio');
             }
@@ -189,7 +188,7 @@ class ShowEventLivewire extends Component
             }
             $rand = rand(0, count($tickets) - 1);
             $ticket = $tickets[$rand];
-            // sleep(5);
+            sleep(5);
             $this->ganador = Ticket::where('ticket', $ticket)->first();
 
             $this->ganador->user->tickets()->each(function ($ticket) {
@@ -200,7 +199,6 @@ class ShowEventLivewire extends Component
             $this->premio->update([
                 'active' => false
             ]);
-            // dd($this->ganador);
             SorteoPremio::create([
                 'premio_id' => $this->event_id,
                 'ticket_id' => $this->ganador->id,
@@ -218,5 +216,34 @@ class ShowEventLivewire extends Component
     {
         $this->showSorteo = false;
         $this->emit('confeti-stop');
+    }
+
+    public function resetSorteos()
+    {
+        DB::beginTransaction();
+        try {
+            $premios = Premio::all();
+            foreach ($premios as $premio) {
+                $premio->update([
+                    'active' => true
+                ]);
+                $tickets = Ticket::all();
+                $tickets->each(function ($ticket) {
+                    $ticket->update([
+                        'active' => true
+                    ]);
+                    $sorteoPremio = SorteoPremio::where('ticket_id', $ticket->id)->first() ?? null;
+                    if ($sorteoPremio != null) {
+                        $sorteoPremio->delete();
+                    }
+                });
+            }
+            DB::commit();
+            $this->alertInfo('Se han eliminado todos los sorteos');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollBack();
+            $this->alertError('Ocurrió un error al intentar eliminar los sorteos');
+        }
     }
 }
