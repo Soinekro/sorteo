@@ -5,10 +5,17 @@
                 <div class="flex flex-col gap-3 items-center p-5 xl:p-8 shadow-sm shadow-next-500 rounded-md my-3 w-96">
                     <img src="{{ asset('img/LOGO_SORTEO_NEXT_RGB_WEB.png') }}" alt="Logo" class="sm:w-60 w-48">
                     <h2 class="text-3xl font-bold text-gray-800">
-                        {{ $premios }} Premios
+
+                        @if ($premios > 1)
+                            {{ $premios }} Premios
+                        @elseif($premios == 1)
+                            1 Premio
+                        @else
+                            Próximamente
+                        @endif
                     </h2>
                     <div class="w-full md:w-80 flex items-center justify-center">
-                        <section class="flex flex-col items-center justify-center w-full"
+                        <section class="flex flex-col items-center justify-center w-full" x-show="slides.length > 0"
                             @keydown.arrow-right="state.usedKeyboard = true;updateCurrent(nextSlide)"
                             @keydown.arrow-left="state.usedKeyboard = true;updateCurrent(previousSlide)"
                             @keydown.window.tab="state.usedKeyboard = true" x-data="testimonialSlideshow(slides)"
@@ -25,12 +32,15 @@
                                             :x-transition:leave-start="transitions('leave-start')"
                                             :x-transition:leave-end="transitions('leave-end')">
                                             <img :src="slide.image" :alt="'Slide ' + (index + 1)"
-                                                class="w-full rounded-2xl" :class="{ 'animate-pulse': !state.moving }"
+                                                x-show="slides.length > 1" class="w-full rounded-2xl"
+                                                :class="{ 'animate-pulse': !state.moving }"
                                                 :style="`animation-duration:${attributes.timer}ms;`">
+                                            <img :src="slide.image" :alt="'Slide ' + (index + 1)"
+                                                x-show="slides.length == 1" class="w-full rounded-2xl">
                                         </div>
                                     </div>
                                 </template>
-                                <div x-cloak class="w-full h-full absolute top-0 ">
+                                <div x-cloak class="w-full h-full absolute top-0" x-show="slides.length > 1">
                                     <div class="bg-next-500 h-full opacity-20" :class="{ 'progress': !state.moving }"
                                         :style="`animation-duration:${attributes.timer}ms;`">
                                     </div>
@@ -39,7 +49,7 @@
                             <div aria-live="polite" aria-atomic="true" class="sr-only"
                                 x-text="'Slide ' + (state.currentSlide + 1) + ' of ' + slides.length">
                             </div>
-                            <div class="-my-4">
+                            <div class="-my-4" x-show="slides.length > 1">
                                 <template x-for="(slide, index) in Array.from({ length: slides.length })"
                                     :key="index">
                                     <button
@@ -164,13 +174,13 @@
                         this.updateCurrent(this.state.looping ? next : this.currentSlide)
                         this.autoplayTimer = setTimeout(() => {
                             requestAnimationFrame(this.loop)
-                        }, this.attributes.timer - 300)
+                        }, this.attributes.timer - 370)
 
                     }
                     this.autoplayTimer = setTimeout(() => {
                         this.state.looping = true
                         requestAnimationFrame(this.loop)
-                    }, this.attributes.timer -300)
+                    }, this.attributes.timer - 370)
                 },
                 stopAutoplay() {
                     clearTimeout(this.autoplayTimer)

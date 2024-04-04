@@ -66,9 +66,9 @@
                             </td>
                             <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                @if ($item->sorteado->first() != null)
-                                    {{ $item->sorteado()->lastWinner()->ticket->ticket }} -
-                                    {{ $item->sorteado->first()->ticket->user->name }}
+                                @if ($item->sorteado() != null)
+                                    {{ $item->sorteado()->lastWinner()->ticket->ticket}} -
+                                    {{ $item->sorteado()->lastWinner()->ticket->user->name}}
                                 @else
                                     <span class="ml-3 font-bold text-gray-900"> Sin Ganador</span>
                                 @endif

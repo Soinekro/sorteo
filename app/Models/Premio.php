@@ -24,8 +24,13 @@ class Premio extends Model
         return ucfirst($value);
     }
 
-    public function sorteado()
+    public function sorteoPremios()
     {
         return $this->hasMany(SorteoPremio::class);
+    }
+
+    public function sorteado()
+    {
+        return $this->sorteoPremios()->where('active', true)->latest('id')->first();
     }
 }
