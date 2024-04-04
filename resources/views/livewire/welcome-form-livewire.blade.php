@@ -52,9 +52,9 @@
         <div class="mx-2">
             <div class="w-full flex items-center justify-center mt-1 h-16">
                 <button
-                    class="m-auto w-64 h-12 py-2 text-3xl font-bold leading-none text-white transition uppercase text-center
-                    hover:w-full hover:h-full hover:py-4
-                            duration-300 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500">
+                    class="w-64 h-12 m-auto text-3xl font-bold text-white text-center
+                    transition delay-100 duration-300 uppercase rounded-2xl
+                 bg-next-500 hover:bg-next-600 hover:ring-next-100 hover:scale-125">
                     {{ __('Solicitar') }}
                 </button>
             </div>

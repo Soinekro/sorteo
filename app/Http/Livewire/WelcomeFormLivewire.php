@@ -101,6 +101,9 @@ class WelcomeFormLivewire extends Component
                 ]);
                 DB::commit();
                 if ($registro) {
+                    //verificar si el servidor websocket esta activo
+
+                    
                     broadcast(new UserRegisteredEvent($registro))->toOthers();
                 }
                 return redirect()->route('gracias');

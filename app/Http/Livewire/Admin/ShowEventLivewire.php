@@ -125,7 +125,9 @@ class ShowEventLivewire extends Component
 
     public function resetValues()
     {
-        $this->reset(['event_id', 'name', 'slug', 'description', 'date', 'time', 'location', 'price', 'image']);
+        $this->reset(['event_id', 'name', 'slug',
+        'description', 'date', 'time', 'location',
+        'price', 'image']);
     }
 
     public function edit(Premio $event)
@@ -162,7 +164,7 @@ class ShowEventLivewire extends Component
                     ]);
                 }
                 DB::commit();
-                $this->alertInfo('Premio activado correctamente , se ha eliminado el sorteo anterior');
+                $this->alertInfo('Premio activado correctamente');
             } catch (\Exception $e) {
                 DB::rollBack();
                 $this->alertError('Ocurrió un error al intentar activar el premio');
@@ -176,7 +178,7 @@ class ShowEventLivewire extends Component
         $this->showSorteo = true;
         $this->event_id = $event->id;
         $this->premio = $event;
-        $this->ganador = $event->sorteado->first()->ticket ?? null;
+        $this->ganador = $event->sorteado()->ticket ?? null;
     }
 
     public function sortear()
@@ -184,8 +186,6 @@ class ShowEventLivewire extends Component
         DB::beginTransaction();
         try {
             $tickets = Ticket::where('active', true)->pluck('ticket')->toArray();
-            //reordenar todos los tickets
-            // for ($i = 1; $i <= 3; $i++) {
             shuffle($tickets);
             // }
             $rand = mt_rand(0, count($tickets) - 1);
