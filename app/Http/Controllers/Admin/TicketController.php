@@ -29,6 +29,6 @@ class TicketController extends Controller
                 ->paginate(12);
             $ofertas_rand = [];
         }
-        return view('mis_tickets', compact('tickets', 'ofertas_rand'));
+        return view('mis_tickets', compact('ofertas_rand'));
     }
 }
