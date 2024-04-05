@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Events\UserRegisteredEvent;
+use App\Jobs\RegisterJob;
 use App\Models\User;
 use App\Traits\AlertTrait;
 use GuzzleHttp\Client;
@@ -101,9 +102,6 @@ class WelcomeFormLivewire extends Component
                 ]);
                 DB::commit();
                 if ($registro) {
-                    //verificar si el servidor websocket esta activo
-
-                    
                     broadcast(new UserRegisteredEvent($registro))->toOthers();
                 }
                 return redirect()->route('gracias');

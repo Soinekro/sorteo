@@ -3370,7 +3370,7 @@ channel.listen(".user.registered.1", function (e) {
   Swal.fire({
     title: "<strong>Nuevo Registro</strong>",
     icon: "info",
-    html: "\n          \xA1Un nuevo usuario fue registrado!<br>\n            <b>Nombre:</b> ".concat(e.user.name, "<br>\n            <b>N\xFAmero:</b> ").concat(e.user.phone, "<br>\n            <b>Email:</b> ").concat(e.user.email, "<br>\n            <b>cantidad de tickets:</b> ").concat(e.user.cantidad, "<br>\n            <u><a href=\"solicitudes\">Ver Listado</a></u>\n        "),
+    html: "\n          \xA1Un nuevo usuario fue registrado!<br>\n            <b>DNI:</b> ".concat(e.user.dni, "<br>\n            <b>Nombre:</b> ").concat(e.user.name, "<br>\n            <b>N\xFAmero:</b> ").concat(e.user.phone, "<br>\n            <b>Email:</b> ").concat(e.user.email, "<br>\n            <b>cantidad de tickets:</b> ").concat(e.user.cantidad, "<br>\n            <u><a href=\"solicitudes\">Ver Listado</a></u>\n        "),
     showCloseButton: false,
     showCancelButton: false,
     focusConfirm: false

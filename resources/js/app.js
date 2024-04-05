@@ -13,6 +13,7 @@ channel.listen(".user.registered.1", (e) => {
         icon: "info",
         html: `
           ¡Un nuevo usuario fue registrado!<br>
+            <b>DNI:</b> ${e.user.dni}<br>
             <b>Nombre:</b> ${e.user.name}<br>
             <b>Número:</b> ${e.user.phone}<br>
             <b>Email:</b> ${e.user.email}<br>

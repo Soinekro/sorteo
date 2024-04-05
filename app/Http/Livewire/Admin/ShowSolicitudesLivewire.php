@@ -17,6 +17,13 @@ class ShowSolicitudesLivewire extends Component
     public $tickets;
     public $solicitud;
 
+    public function getListeners()
+    {
+        return [
+            'echo-private:user.registered.1,.user.registered.1' => 'render',
+        ];
+    }
+
     public function render()
     {
         if ($this->readyToLoad) {
