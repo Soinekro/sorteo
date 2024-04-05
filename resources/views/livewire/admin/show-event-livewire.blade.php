@@ -66,7 +66,7 @@
                             </td>
                             <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                @if ($item->sorteado() != null)
+                                @if ($item->sorteado() != null && $item->sorteado()->lastWinner() != null)
                                     {{ $item->sorteado()->lastWinner()->ticket->ticket}} -
                                     {{ $item->sorteado()->lastWinner()->ticket->user->name}}
                                 @else
@@ -97,7 +97,7 @@
                                             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:bg-gray-500 text-blueGray-700 cursor-pointer">
                                             Editar
                                         </div>
-                                        @if ($item->image != null && $item->active)
+                                        @if ($item->image != null && $item->active && $item->sorteado() == null)
                                             <div wire:click="sorteo('{{ $item->id }}')" @click="open = false"
                                                 class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-next-500 hover:bg-next-700 text-blueGray-700 cursor-pointer">
                                                 Sortear

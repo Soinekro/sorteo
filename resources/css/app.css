@@ -37,31 +37,29 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
-    /* animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; */
 }
 
 @keyframes pulse {
     0% {
-        /* transform: scale(1); */
-        opacity: 0;
+        opacity: 0.04;
     }
     1% {
-        opacity: 0.03;
+        opacity: 0.07;
     }
     2% {
-        opacity: 0.06;
+        opacity: 0.10;
     }
     3% {
-        opacity: 0.09;
+        opacity: 0.13;
     }
     4% {
-        opacity: 0.12;
+        opacity: 0.16;
     }
     5% {
-        opacity: 0.15;
+        opacity: 0.19;
     }
     10% {
-        opacity: 0.2;
+        opacity: 0.22;
     }
     15% {
         opacity: 0.25;
@@ -79,24 +77,22 @@
         opacity: 1;
     }
     95% {
-        opacity: 0.25;
+        opacity: 0.45;
     }
     96% {
-        opacity: 0.2;
+        opacity: 0.40;
     }
     97% {
-        opacity: 0.15;
+        opacity: 0.35;
     }
     98% {
-        opacity: 0.1;
+        opacity: 0.30;
     }
     99% {
-        opacity: 0.00;
-    }
-    105% {
-        opacity: 0;
+        opacity: 0.25;
     }
 }
+
 .helvetica {
     font-family: "Helvetica Neue", sans-serif;
 }

@@ -31,6 +31,6 @@ class Premio extends Model
 
     public function sorteado()
     {
-        return $this->sorteoPremios()->where('active', true)->latest('id')->first();
+        return $this->sorteoPremios()->where('active', true)->latest('id')->first() ?? null;
     }
 }

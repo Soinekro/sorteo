@@ -240,7 +240,7 @@
                 attributes: {
                     direction: 'right-left',
                     duration: 0,
-                    timer: 4000,
+                    timer: 7000,
                 },
                 slides: [],
                 setup() {
@@ -316,13 +316,13 @@
                         this.updateCurrent(this.state.looping ? next : this.currentSlide)
                         this.autoplayTimer = setTimeout(() => {
                             requestAnimationFrame(this.loop)
-                        }, this.attributes.timer - 370)
+                        }, this.attributes.timer - 700)
 
                     }
                     this.autoplayTimer = setTimeout(() => {
                         this.state.looping = true
                         requestAnimationFrame(this.loop)
-                    }, this.attributes.timer - 370)
+                    }, this.attributes.timer - 700)
                 },
                 stopAutoplay() {
                     clearTimeout(this.autoplayTimer)
@@ -340,7 +340,6 @@
             let tercio2 = [];
             let tercio3 = [];
             if (imagenes.length % 3 != 0) {
-                console.log(imagenes.length % 3);
                 tercio2 = imagenes.slice(tercio, (tercio * 2) + 1);
                 tercio3 = imagenes.slice((tercio * 2) + 1, imagenes.length);
             } else {
