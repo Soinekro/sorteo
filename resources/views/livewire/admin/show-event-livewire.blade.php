@@ -66,9 +66,9 @@
                             </td>
                             <td
                                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                                @if ($item->sorteado() != null && $item->sorteado()->lastWinner() != null)
-                                    {{ $item->sorteado()->lastWinner()->ticket->ticket}} -
-                                    {{ $item->sorteado()->lastWinner()->ticket->user->name}}
+                                @if ($item->sorteado() != null && $item->sorteado() != null)
+                                    {{ $item->sorteado()->ticket->ticket}} -
+                                    {{ $item->sorteado()->ticket->user->name}}
                                 @else
                                     <span class="ml-3 font-bold text-gray-900"> Sin Ganador</span>
                                 @endif
@@ -217,8 +217,7 @@
                             </div>
                         </div>
                     @endif
-                    <div id="rulet" class="hidden absolute top-0 right-0 h-full w-full bg-white opacity-75"
-                        {{-- wire:loading.block wire:target="sortear" --}}>
+                    <div id="rulet" class="hidden absolute top-0 right-0 h-full w-full bg-white opacity-75">
                         <img src="{{ asset('gifs/RULETA.gif') }}" alt="" class="h-full w-full">
                     </div>
             </x-slot>

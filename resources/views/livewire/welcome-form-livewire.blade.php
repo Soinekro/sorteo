@@ -19,12 +19,12 @@
         </div>
         <div class="mx-2">
             <input id="phone" type="text" placeholder="CELULAR*" class="form-input-next" autocomplete="off"
-                wire:model.defer="phone" />
+            wire:model.defer="phone" />
             <x-jet-input-error for="phone" class="mt-2 text-red-500" />
         </div>
         <div class="mx-2">
             <input id="email" type="email" placeholder="CORREO ELECTRÓNICO*" class="form-input-next"
-                wire:model.defer="email" autocomplete="off" />
+            wire:model.defer="email" autocomplete="off" />
             <x-jet-input-error for="email" class="mt-2 text-red-500" />
         </div>
         <div class="mx-2">
@@ -41,10 +41,10 @@
         <div class="mx-2">
             <label class="flex flex-inline justify-center cursor-pointer select-none">
                 <input id="terms" type="checkbox" wire:model="aceptar"
-                    class="w-4 h-4 border-2 border-next-500 text-next-600 rounded focus:ring-next-500 dark:focus:ring-next-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <p class="ml-2 text-sm leading-relaxed text-gray-900">Aceptas nuestros <button type="button"
+                    class="w-4 h-4 border-2 border-next-500 text-next-600 rounded focus:ring-next-500 hover:cursor-pointer dark:focus:ring-next-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <p class="ml-2 text-sm leading-relaxed text-gray-900">Acepto <button type="button"
                         wire:click="displayPolicies"
-                        class="font-bold text-gray-700 underline">{{ __('Términos y condiciones') }}</button>?
+                        class="font-bold text-gray-700 underline">{{ __('Términos y condiciones') }}</button>
                 </p>
             </label>
             <x-jet-input-error for="aceptar" class="mt-2 text-red-500" />

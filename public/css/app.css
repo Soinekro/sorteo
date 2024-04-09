@@ -1215,6 +1215,9 @@ select {
 .m-\[1px\] {
   margin: 1px;
 }
+.m-\[3px\] {
+  margin: 3px;
+}
 .m-auto {
   margin: auto;
 }
@@ -1288,9 +1291,6 @@ select {
 .-mr-2 {
   margin-right: -0.5rem;
 }
-.-mt-5 {
-  margin-top: -1.25rem;
-}
 .-mt-px {
   margin-top: -1px;
 }
@@ -1326,6 +1326,9 @@ select {
 }
 .ml-4 {
   margin-left: 1rem;
+}
+.ml-5 {
+  margin-left: 1.25rem;
 }
 .ml-6 {
   margin-left: 1.5rem;
@@ -1503,6 +1506,18 @@ select {
 }
 .min-w-0 {
   min-width: 0px;
+}
+.min-w-5 {
+  min-width: 1.25rem;
+}
+.min-w-96 {
+  min-width: 24rem;
+}
+.min-w-3 {
+  min-width: 0.75rem;
+}
+.min-w-32 {
+  min-width: 8rem;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -2267,10 +2282,6 @@ select {
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
-.shadow-next-500 {
-  --tw-shadow-color: #0fb9b9;
-  --tw-shadow: var(--tw-shadow-colored);
-}
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -2445,19 +2456,19 @@ select {
         opacity: 0.19;
     }
     10% {
-        opacity: 0.22;
+        opacity: 0.30;
     }
     15% {
-        opacity: 0.25;
+        opacity: 0.40;
     }
     20% {
-        opacity: 0.3;
+        opacity: 0.50;
     }
     25% {
-        opacity: 0.5;
+        opacity: 0.7;
     }
     30% {
-        opacity: 0.7;
+        opacity: 0.9;
     }
     35% {
         opacity: 1;
@@ -2483,10 +2494,26 @@ select {
     font-family: "Helvetica Neue", sans-serif;
 }
 
+.hover\:scale-105:hover {
+  --tw-scale-x: 1.05;
+  --tw-scale-y: 1.05;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:scale-110:hover {
+  --tw-scale-x: 1.1;
+  --tw-scale-y: 1.1;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .hover\:scale-125:hover {
   --tw-scale-x: 1.25;
   --tw-scale-y: 1.25;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
 }
 
 .hover\:border-gray-300:hover {
@@ -3017,6 +3044,10 @@ select {
 
   .md\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .md\:ml-2 {
+    margin-left: 0.5rem;
   }
 
   .md\:mt-0 {

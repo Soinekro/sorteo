@@ -7,7 +7,7 @@ use App\Models\Ticket;
 
 class TicketController extends Controller
 {
-    public function mis_tickets()
+    public function tickets()
     {
         if (auth()->user()->id > 1) {
             $tickets = Ticket::where('user_id', auth()->id())
@@ -29,6 +29,6 @@ class TicketController extends Controller
                 ->paginate(12);
             $ofertas_rand = [];
         }
-        return view('mis_tickets', compact('ofertas_rand'));
+        return view('tickets', compact('ofertas_rand'));
     }
 }

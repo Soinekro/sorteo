@@ -18,12 +18,12 @@ class ShowMyTicketsLivewire extends Component
     {
         if ($this->readyToLoad) {
             if (auth()->user()->id > 1) {
-                $tickets = Ticket::where('user_id', auth()->id())
-                    ->join('users', 'tickets.user_id', '=', 'users.id')
+                $tickets = Ticket::join('users', 'tickets.user_id', '=', 'users.id')
                     ->when($this->search, function ($query) {
                         $query->where('ticket', 'like', '%' . $this->search . '%')
                             ->orWhere('users.name', 'like', '%' . $this->search . '%');
                     })
+                    ->where('user_id', auth()->id())
                     ->orderBy('tickets.id', 'asc')
                     ->paginate(6);
             } else {

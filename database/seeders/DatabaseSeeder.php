@@ -24,13 +24,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@mail.com',
             'password' => Hash::make('password'),
         ]);
-        User::factory(100)->create();
+        // User::factory(100)->create();
 
         $premios = [
             'Laptop',
-            'Smartphone',
-            'Tablet',
-            'Smartwatch',
+            'Teclado',
+            'Parlantes',
+            'Mouse',
             'Audífonos',
             'Cámara',
         ];
@@ -43,11 +43,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for($i = 1; $i <= 500; $i++) {
-            Ticket::create([
-                'user_id' => User::all()->random()->id,
-                'ticket' => str_pad($i, 8, '0', STR_PAD_LEFT)
-            ]);
-        }
+        // for($i = 1; $i <= 500; $i++) {
+        //     Ticket::create([
+        //         'user_id' => User::all()->random()->id,
+        //         'ticket' => str_pad($i, 8, '0', STR_PAD_LEFT)
+        //     ]);
+        // }
     }
 }

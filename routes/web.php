@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\TicketController;
 use App\Models\Premio;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,8 +41,8 @@ Route::get('gracias', function () {
 })->name('gracias');
 
 Route::middleware('auth')
-    ->get('mis-tickets', [TicketController::class, 'mis_tickets'])
-    ->name('mis-tickets');
+    ->get('tickets', [TicketController::class, 'tickets'])
+    ->name('tickets');
 
 //prueba------------------------------------------------------------
 Route::get('prueba', function () {
@@ -61,4 +62,10 @@ Route::middleware([
     Route::get('/solicitudes', function () {
         return view('solicitudes');
     })->name('solicitudes');
+    Route::get('/participantes', function () {
+        return view('participantes');
+    })->name('participantes');
+    Route::get('/mis_tickets/{user}', function (User $user) {
+        return view('mis_tickets', compact('user'));
+    })->name('mis-tickets');
 });

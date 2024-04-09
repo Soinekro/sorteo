@@ -64,6 +64,10 @@ class ShowSolicitudesLivewire extends Component
     }
     public function edit(RegisterUser $solicitud)
     {
+        if ($solicitud->attended == true) {
+            $this->alertError('El ticket ya fue generado');
+            return;
+        }
         $this->open = true;
         $this->solicitud = $solicitud;
         $this->tickets = $solicitud->tickets;
@@ -80,7 +84,6 @@ class ShowSolicitudesLivewire extends Component
                 'tickets.required' => 'El campo es requerido',
                 'tickets.numeric' => 'El campo debe ser numerico',
                 'tickets.min' => 'El campo debe ser mayor a 0',
-                // 'tickets.max' => 'El campo debe ser menor o igual a 10'
             ]
         );
         DB::beginTransaction();
@@ -96,7 +99,6 @@ class ShowSolicitudesLivewire extends Component
             $this->alertSuccess('Ticket Actualizado correctamente');
             $this->open = false;
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             DB::rollBack();
             $this->alertError('Error al generar solicitud');
         }

@@ -14,8 +14,8 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
 
                     @auth
-                        <x-jet-nav-link href="{{ route('mis-tickets') }}" :active="request()->routeIs('mis-tickets')">
-                            {{ __('Mis Tickets') }}
+                        <x-jet-nav-link href="{{ route('tickets') }}" :active="request()->routeIs('tickets')">
+                            {{ __('Tickets') }}
                         </x-jet-nav-link>
                         @if (auth()->user()->id == 1)
                             <x-jet-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
@@ -23,6 +23,9 @@
                             </x-jet-nav-link>
                             <x-jet-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                                 {{ __('Solicitudes') }}
+                            </x-jet-nav-link>
+                            <x-jet-nav-link href="{{ route('participantes') }}" :active="request()->routeIs('participantes')">
+                                {{ __('participantes') }}
                             </x-jet-nav-link>
                         @endif
                     @else
@@ -173,8 +176,8 @@
         <div class="pt-2 pb-3 space-y-1">
 
             @auth
-                <x-jet-responsive-nav-link href="{{ route('mis-tickets') }}" :active="request()->routeIs('mis-tickets')">
-                    {{ __('Mis Tickets') }}
+                <x-jet-responsive-nav-link href="{{ route('tickets') }}" :active="request()->routeIs('tickets')">
+                    {{ __('Tickets') }}
                 </x-jet-responsive-nav-link>
                 @if (auth()->user()->id == 1)
                     <x-jet-responsive-nav-link href="{{ route('premios') }}" :active="request()->routeIs('premios')">
@@ -182,6 +185,9 @@
                     </x-jet-responsive-nav-link>
                     <x-jet-responsive-nav-link href="{{ route('solicitudes') }}" :active="request()->routeIs('solicitudes')">
                         {{ __('Solicitudes') }}
+                    </x-jet-responsive-nav-link>
+                    <x-jet-responsive-nav-link href="{{ route('participantes') }}" :active="request()->routeIs('participantes')">
+                        {{ __('participantes') }}
                     </x-jet-responsive-nav-link>
                 @endif
             @else

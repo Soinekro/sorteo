@@ -52,7 +52,6 @@
                 text: event.message,
                 icon: event.type,
             });
-
         })
         Livewire.on('confeti', () => {
             poof(true);
@@ -60,7 +59,6 @@
         Livewire.on('confeti-stop', () => {
             poof(false);
         })
-
     </script>
 </body>
 

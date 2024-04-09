@@ -10,7 +10,6 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
-// use GuzzleHttp\Psr7\Request as Psr7Request;
 
 class WelcomeFormLivewire extends Component
 {
@@ -52,12 +51,14 @@ class WelcomeFormLivewire extends Component
 
     public function save()
     {
+        $user = User::where('dni', $this->dni)
+            ->first();
         $this->validate(
             [
                 'dni' => 'required|numeric|digits:8',
                 'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
-                'phone' => 'required|numeric|digits:9|unique:users,phone',
+                'email' => 'required|email|unique:users,email,' . ($user->id ?? 'null'),
+                'phone' => 'required|numeric|digits:9|unique:users,phone,' .( $user->id ?? 'null'),
                 'cantidad' => 'required|numeric|min:1',
                 'aceptar' => 'accepted',
             ],
@@ -92,26 +93,24 @@ class WelcomeFormLivewire extends Component
                     'password' => Hash::make($this->dni),
                 ]);
             }
-            if ($user->tickets->count() > 0) {
-                $this->alertError('Ya tiene tickets generados, comuníquese con el administrador.');
-            } elseif ($user->registerUsers()->where('attended', false)->count() == 0) {
+            if ($user->registerUsers()->where('attended', false)->count() == 0) {
                 $registro = $user->registerUsers()->create([
                     'tickets' => $this->cantidad,
                     'accepted_terms' => $this->aceptar,
                     'attended' => false,
                 ]);
-                DB::commit();
-                if ($registro) {
-                    broadcast(new UserRegisteredEvent($registro))->toOthers();
-                }
-                return redirect()->route('gracias');
             } else {
-                $this->addError('cantidad', 'Ya estas registrado, en brebe nos comunicaremos contigo.');
-                DB::rollBack();
-                return;
+                $registro = $user->registerUsers()->where('attended', false)->first();
+                $registro->tickets = $this->cantidad + $registro->tickets;
+                $registro->accepted_terms = $this->aceptar;
+                $registro->save();
             }
+            DB::commit();
+            if ($registro) {
+                broadcast(new UserRegisteredEvent($registro))->toOthers();
+            }
+            return redirect()->route('gracias');
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             DB::rollBack();
         }
     }
@@ -124,10 +123,12 @@ class WelcomeFormLivewire extends Component
             $url = config('services.api_dni_ruc.url');
 
             $user = User::where('dni', $this->dni)
-                ->first();
+                ->first() ?? null;
 
-            if ($user) {
+            if ($user != null) {
                 $this->name = $user->name;
+                $this->email = $user->email ?? null;
+                $this->phone = $user->phone ?? null;
             } else {
                 $client = new Client(['base_uri' => $url, 'verify' => false]);
                 $parameters = [
@@ -148,8 +149,12 @@ class WelcomeFormLivewire extends Component
                 $status = $res->getStatusCode();
                 if ($status == 200) {
                     $this->name = $response['nombres'] . ' ' . $response['apellidoPaterno'] . ' ' . $response['apellidoMaterno'];
+                    $this->email = null;
+                    $this->phone = null;
                 } else {
-                    $this->name = '';
+                    $this->name = null;
+                    $this->email = null;
+                    $this->phone = null;
                     $this->addError('dni', 'DNI no encontrado');
                     $this->addError('name', 'Ingrese sus nombres y apellidos');
                 }

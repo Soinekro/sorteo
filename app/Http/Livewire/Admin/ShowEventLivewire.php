@@ -117,6 +117,7 @@ class ShowEventLivewire extends Component
             DB::commit();
             $this->resetValues();
             $this->open = false;
+            $this->alertSuccess('Premio guardado correctamente');
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Ocurrió un error al intentar guardar el Premio');
