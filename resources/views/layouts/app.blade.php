@@ -14,7 +14,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     {{-- <link rel="stylesheet" href="css/app.css"> --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>
     {{-- <script src="js/app.js" defer></script> --}}
