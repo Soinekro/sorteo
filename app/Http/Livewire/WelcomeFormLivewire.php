@@ -58,7 +58,7 @@ class WelcomeFormLivewire extends Component
                 'dni' => 'required|numeric|digits:8',
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email,' . ($user->id ?? 'null'),
-                'phone' => 'required|numeric|digits:9|unique:users,phone,' .( $user->id ?? 'null'),
+                'phone' => 'required|numeric|digits:9|unique:users,phone,' . ($user->id ?? 'null'),
                 'cantidad' => 'required|numeric|min:1',
                 'aceptar' => 'accepted',
             ],
@@ -117,48 +117,53 @@ class WelcomeFormLivewire extends Component
 
     public function updatedDni()
     {
-        //si el dni tiene 8 digitos
-        if (strlen($this->dni) == 8) {
-            $token = config('services.api_dni_ruc.token');
-            $url = config('services.api_dni_ruc.url');
+        try {
+            //si el dni tiene 8 digitos
+            if (strlen($this->dni) == 8) {
+                $token = config('services.api_dni_ruc.token');
+                $url = config('services.api_dni_ruc.url');
 
-            $user = User::where('dni', $this->dni)
-                ->first() ?? null;
+                $user = User::where('dni', $this->dni)
+                    ->first() ?? null;
 
-            if ($user != null) {
-                $this->name = $user->name;
-                $this->email = $user->email ?? null;
-                $this->phone = $user->phone ?? null;
-            } else {
-                $client = new Client(['base_uri' => $url, 'verify' => false]);
-                $parameters = [
-                    'http_errors' => false,
-                    'connect_timeout' => 5,
-                    'headers' => [
-                        'Authorization' => 'Bearer ' . $token,
-                        'Referer' => 'https://apis.net.pe/api-consulta-dni',
-                        'User-Agent' => 'laravel/guzzle',
-                        'Accept' => 'application/json',
-                    ],
-                    'query' => ['numero' => $this->dni]
-                ];
-
-                // Para usar la versión 1 de la api, cambiar a /v1/ruc
-                $res = $client->request('GET', '/v1/dni', $parameters);
-                $response = json_decode($res->getBody()->getContents(), true);
-                $status = $res->getStatusCode();
-                if ($status == 200) {
-                    $this->name = $response['nombres'] . ' ' . $response['apellidoPaterno'] . ' ' . $response['apellidoMaterno'];
-                    $this->email = null;
-                    $this->phone = null;
+                if ($user != null) {
+                    $this->name = $user->name;
+                    $this->email = $user->email ?? null;
+                    $this->phone = $user->phone ?? null;
                 } else {
-                    $this->name = null;
-                    $this->email = null;
-                    $this->phone = null;
-                    $this->addError('dni', 'DNI no encontrado');
-                    $this->addError('name', 'Ingrese sus nombres y apellidos');
+                    $client = new Client(['base_uri' => $url, 'verify' => false]);
+                    $parameters = [
+                        'http_errors' => false,
+                        'connect_timeout' => 5,
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . $token,
+                            'Referer' => 'https://apis.net.pe/api-consulta-dni',
+                            'User-Agent' => 'laravel/guzzle',
+                            'Accept' => 'application/json',
+                        ],
+                        'query' => ['numero' => $this->dni]
+                    ];
+
+                    // Para usar la versión 1 de la api, cambiar a /v1/ruc
+                    $res = $client->request('GET', '/v1/dni', $parameters);
+                    $response = json_decode($res->getBody()->getContents(), true);
+                    $status = $res->getStatusCode();
+                    if ($status == 200) {
+                        $this->name = $response['nombres'] . ' ' . $response['apellidoPaterno'] . ' ' . $response['apellidoMaterno'];
+                        $this->email = null;
+                        $this->phone = null;
+                    } else {
+                        $this->name = null;
+                        $this->email = null;
+                        $this->phone = null;
+                        $this->addError('dni', 'DNI no encontrado');
+                        $this->addError('name', 'Ingrese sus nombres y apellidos');
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            $this->addError('dni', 'DNI no encontrado');
+            $this->addError('name', 'Ingrese sus nombres y apellidos');
         }
     }
 }
