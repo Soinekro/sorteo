@@ -13,7 +13,7 @@
                             En brebe nos podremos en contacto contigo para ver los detalles de tu participación.
                         </p>
                         @include('layouts.info-event')
-                        <a href="https://www.next.net.pe/"
+                        <a href="https://www.next.net.pe/" target="_blank"
                             class="w-full px-2 py-5 text-3xl font-bold leading-none text-white transition uppercase text-center
                                 duration-300 rounded-2xl hover:bg-next-600 focus:ring-4 focus:ring-next-100 bg-next-500 hover:scale-110">
                             {{ __('Visita') }} <br>
