@@ -187,6 +187,10 @@ class ShowEventLivewire extends Component
         DB::beginTransaction();
         try {
             $tickets = Ticket::where('active', true)->pluck('ticket')->toArray();
+            if (count($tickets) == 0) {
+                $this->alertError('No hay tickets disponibles para sortear');
+                return;
+            }
             shuffle($tickets);
             // }
             $rand = mt_rand(0, count($tickets) - 1);
