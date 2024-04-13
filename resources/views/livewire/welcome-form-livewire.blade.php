@@ -14,7 +14,7 @@
         </div>
         <div class="mx-2">
             <input id="name" type="text" placeholder="NOMBRES Y APELLIDOS*" class="form-input-next"
-                @if ($name != null) disabled @endif wire:model="name" autocomplete="off" />
+                @if ($name != null) disabled @endif wire:model.defer="name" autocomplete="off" />
             <x-jet-input-error for="name" class="mt-2 text-red-500" />
         </div>
         <div class="mx-2">
